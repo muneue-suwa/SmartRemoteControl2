@@ -8,6 +8,13 @@ Created on Tue Dec 11 23:06:47 2018
 
 # This code is based on irrp.py on http://abyz.me.uk
 
+import time
+import json
+import os
+import argparse
+
+import pigpio  # http://abyz.co.uk/rpi/pigpio/python.html
+
 # irrp.py
 # 2015-12-21
 # Public Domain
@@ -120,17 +127,15 @@ def backup(f):
     """
     try:
         os.rename(os.path.realpath(f)+".bak1", os.path.realpath(f)+".bak2")
-    except:
+    except FileNotFoundError:
         pass
-
     try:
         os.rename(os.path.realpath(f)+".bak", os.path.realpath(f)+".bak1")
-    except:
+    except FileNotFoundError:
         pass
-
     try:
         os.rename(os.path.realpath(f), os.path.realpath(f)+".bak")
-    except:
+    except FileNotFoundError:
         pass
 
 
@@ -283,7 +288,7 @@ def tidy_mark_space(records, base):
         #
         # becomes 556(x80) 1050(x20) 1725(x10)
         #
-        if v == None:
+        if v is None:
             e = [plen]
             v = plen
             tot = plen * ms[plen]
@@ -376,7 +381,7 @@ if args.record:  # Record.
         f = open(FILE, "r")
         records = json.load(f)
         f.close()
-    except:
+    except FileNotFoundError:
         records = {}
 
     pi.set_mode(GPIO, pigpio.INPUT)  # IR RX connected to this GPIO.
@@ -441,7 +446,7 @@ else:  # Playback.
 
     try:
         f = open(FILE, "r")
-    except:
+    except FileNotFoundError:
         print("Can't open: {}".format(FILE))
         exit(0)
 
