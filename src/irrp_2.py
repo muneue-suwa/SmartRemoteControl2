@@ -72,19 +72,21 @@ TRANSMIT
 
 
 class IRRP2:
-    def __init__(self):
-        self.get_argument()
-        self.GPIO = self.args.gpio
-        self.FILE = self.args.file
-        self.GLITCH = self.args.glitch
-        self.PRE_MS = self.args.pre
-        self.POST_MS = self.args.post
-        self.FREQ = self.args.freq
-        self.VERBOSE = self.args.verbose
-        self.SHORT = self.args.short
-        self.GAP_MS = self.args.gap
-        self.NO_CONFIRM = self.args.no_confirm
-        self.TOLERANCE = self.args.tolerance
+    def __init__(self, PLAY, RECORD, GPIO, FILE, ID,
+                 FREQ=38.0, GAP_MS=100, GLITCH=100, POST_MS=15,
+                 PRE_MS=200, SHORT=10, TOLERANCE=15):
+
+        self.GPIO = GPIO
+        self.FILE = FILE
+        self.GLITCH = GLITCH
+        self.PRE_MS = PRE_MS
+        self.POST_MS = POST_MS
+        self.FREQ = FREQ
+        self.VERBOSE = None
+        self.SHORT = SHORT
+        self.GAP_MS = GAP_MS
+        self.NO_CONFIRM = None
+        self.TOLERANCE = TOLERANCE
 
         self.POST_US = self.POST_MS * 1000
         self.PRE_US = self.PRE_MS * 1000
@@ -135,7 +137,27 @@ class IRRP2:
         p.add_argument("--no-confirm", help="No confirm needed",
                        action="store_true")
 
-        self.args = p.parse_args()
+        args = p.parse_args()
+        self.GPIO = args.gpio
+        self.FILE = args.file
+        self.GLITCH = args.glitch
+        self.PRE_MS = args.pre
+        self.POST_MS = args.post
+        self.FREQ = args.freq
+        self.VERBOSE = args.verbose
+        self.SHORT = args.short
+        self.GAP_MS = args.gap
+        self.NO_CONFIRM = args.no_confirm
+        self.TOLERANCE = args.tolerance
+        self.RECORD = args.record
+        self.ID = args.id
+
+        self.POST_US = self.POST_MS * 1000
+        self.PRE_US = self.PRE_MS * 1000
+        self.GAP_S = self.GAP_MS / 1000.0
+        self.CONFIRM = not self.NO_CONFIRM
+        self.TOLER_MIN = (100 - self.TOLERANCE) / 100.0
+        self.TOLER_MAX = (100 + self.TOLERANCE) / 100.0
 
     def backup(self, f):
         """
@@ -343,26 +365,23 @@ class IRRP2:
         self.tidy_mark_space(records, 1)  # Spaces.
 
     def end_of_code(self):
-        global code, fetching_code
-        if len(code) > self.SHORT:
-            self.normalise(code)
-            fetching_code = False
+        if len(self.code) > self.SHORT:
+            self.normalise(self.code)
+            self.fetching_code = False
         else:
-            code = []
+            self.code = []
             print("Short code, probably a repeat, try again")
 
     def cbf(self, gpio, level, tick):
-
-        global last_tick, in_code, code, fetching_code
-
         if level != pigpio.TIMEOUT:
 
-            edge = pigpio.tickDiff(last_tick, tick)
-            last_tick = tick
+            edge = pigpio.tickDiff(self.last_tick, tick)
+            self.last_tick = tick
 
-            if fetching_code:
+            if self.fetching_code:
 
-                if (edge > self.PRE_US) and (not in_code):  # Start of a code.
+                if (edge > self.PRE_US) and (not self.in_code):
+                    # Start of a code.
                     in_code = True
                     self.pi.set_watchdog(self.GPIO, self.POST_MS)
                     # Start watchdog.
@@ -373,7 +392,7 @@ class IRRP2:
                     self.end_of_code()
 
                 elif in_code:
-                    code.append(edge)
+                    self.code.append(edge)
 
         else:
             self.pi.set_watchdog(self.GPIO, 0)  # Cancel watchdog.
@@ -387,7 +406,7 @@ class IRRP2:
         if not self.pi.connected:
             exit(0)
 
-        if self.args.record:  # Record.
+        if self.RECORD:  # Record.
 
             try:
                 f = open(self.FILE, "r")
@@ -407,7 +426,7 @@ class IRRP2:
             # Process each id
 
             print("Recording")
-            for arg in self.args.id:
+            for arg in self.ID:
                 print("Press key for '{}'".format(arg))
                 code = []
                 fetching_code = True
@@ -479,7 +498,7 @@ class IRRP2:
             if self.VERBOSE:
                 print("Playing")
 
-            for arg in self.args.id:
+            for arg in self.ID:
                 if arg in records:
 
                     code = records[arg]
@@ -537,5 +556,6 @@ class IRRP2:
 
 
 if __name__ == "__main__":
-    IRRP2 = IRRP2()
+    IRRP2 = IRRP2(PLAY=None, RECORD=None, GPIO=None, FILE=None, ID=None)
+    IRRP2.get_argument()
     IRRP2.main()
