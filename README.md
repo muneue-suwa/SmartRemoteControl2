@@ -56,6 +56,19 @@ $ python3 --version
 Python 3.5.3
 ```
 
+#### venv について
+`env` ディレクトリがあるとき
+```shell-session:start_development
+source env/bin/activate
+```
+`env` ディレクトリがないとき
+```shell-session:start_development
+python3 -m venv env && \
+source env/bin/activate && \
+pip install pip -U && \
+pip install -r pypi_requirements
+```
+
 ### 実装方法
 - 赤外線送受信部：[pigpio library - Examples](http://abyz.me.uk/rpi/pigpio/examples.html) の `irrp.py` を改変する．
     - `irrp.py` は `Public Domain` であるため，改変，再配布が可能
