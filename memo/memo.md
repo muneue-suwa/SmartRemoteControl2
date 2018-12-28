@@ -50,8 +50,7 @@ SmartRemoteControl2/
     smartrc.cfg.default  # defaultのもの
     smartrc.cfg
     .smartrc.cfg  # 確認されたもの
-  smartrc.sh  # ~/bin に link する
-  start_dev.sh  # venv をスタートさせるもの
+  smartrc.sh
   install.sh
   uninstall.sh
 ```
@@ -60,6 +59,11 @@ SmartRemoteControl2/
 - mode: 受信機能付きか，送信機能のみか
 - slackのtoken
 - その他設定が必要なもの
+
+## install.sh
+```
+export PATH=${PATH}:/to/the/smartrc.sh/path
+```
 
 ## Slack など
 `# smartrc` チャンネルを使う
