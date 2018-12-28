@@ -1,12 +1,30 @@
 # Memo
 
+## Python のバージョン
+```
+$ python3 --version
+Python 3.5.3
+```
+
 ## 機能
-- backup: `backup.py`
-- share: `download.py` && `upload.py`
-- send (playback): `playback.py`
-- learn (record): `send.py`
-- recovery: `download.py`
-- init (update): `slack` の `token` 等を確認する．
+- init (update)
+  - `smartrc.cfg` の内容を確認し，`.smartfc.cfg` を作成する．
+  - `slack` の `token` 等を確認する．
+- send (playback)
+  - 赤外線を送信する
+  - `playback.py`
+- learn (record)
+  - 赤外線を学習する
+  - `send.py`
+- backup
+  - Slack に `data/` のファイルをアップロードし，バックアップする．
+  - `backup.py`
+- recovery
+  - Slack にアップロードファイルをダウンロード，リカバリーする．
+  - `download.py`
+- share
+  - 受信機能のついたものからついていないものに学習したデータを送信する
+  - `download.py` && `upload.py`
 
 ### コマンド
 - backup: `smartrc backup`
@@ -33,6 +51,7 @@ SmartRemoteControl2/
     smartrc.cfg
     .smartrc.cfg  # 確認されたもの
   smartrc.sh  # ~/bin に link する
+  start_dev.sh  # venv をスタートさせるもの
   install.sh
   uninstall.sh
 ```
