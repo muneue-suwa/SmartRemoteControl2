@@ -11,6 +11,8 @@ from os import path
 from slackclient import SlackClient
 from setting.read_cfg import ReadSetting, InitializeSetting
 
+from smartrc_slackbot.src import record, playback
+
 
 class SmartRemoteControl:
     def __init__(self, smartrc_dir):
@@ -61,6 +63,15 @@ class SmartRemoteControl:
           text=text
         )
 
+    def learn(self, record_id):
+        record.main(gpio_num=self.setting.gpio_record,
+                    record_id=record_id,
+                    smartrc_dir=self.smartrc_dir)
+
+    def send(self, playback_id):
+        playback.main(gpio_num=self.setting.gpio_record,
+                      playback_id=playback_id,
+                      smartrc_dir=self.smartrc_dir)
 
 if __name__ == "__main__":
     smartrc_dir = path.expanduser("~/Git/SmartRemoteControl2")
