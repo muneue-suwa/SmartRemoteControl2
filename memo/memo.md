@@ -40,21 +40,20 @@ Python 3.5.3
 ```
 SmartRemoteControl2/
   data/
-  src/
-    smartrc.py  # main，smartrc を RaspberryPI から直接コマンドで操作できるようにする．
-    smartrc_slackbot/
-      run.py  # main for slackbot
-      slackbot_settings.py  
-      # settig file of smartrc_slackbot
-      # $ smartrc init で自動で作成
-      plugins/
-        __init__.py  # モジュールを示すためのファイル（要るのかな?）
-        smartrc_bot.py  # mybot.plugins
-        record.py  # gpio 関連
-        playback.py  # gpio 関連
-        download.py  # file 関連
-        upload.py  # file 関連
-        irrp_2.py
+  smartrc.py  # main，smartrc を RaspberryPI から直接コマンドで操作できるようにする．
+  smartrc_slackbot/
+    run.py  # main for slackbot
+    slackbot_settings.py
+    # settig file of smartrc_slackbot
+    # $ smartrc init で自動で作成
+    src/
+      __init__.py  # モジュールを示すためのファイル（要るのかな?）
+      smartrc_bot.py  # mybot.plugins
+      record.py  # gpio 関連
+      playback.py  # gpio 関連
+      download.py  # file 関連
+      upload.py  # file 関連
+      irrp_2.py
   log/
   setting/
     smartrc.cfg.default  # defaultのもの
