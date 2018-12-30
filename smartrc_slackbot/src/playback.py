@@ -11,7 +11,7 @@ from os import path
 
 
 def main(gpio_num, playback_id, smartrc_dir):
-    filename = path.join(smartrc_dir, "data/pigpio.json")
+    filename = path.join(smartrc_dir, "data/irrp_2.json")
     irrp2 = IRRP2(PLAY=True, RECORD=False,
                   GPIO=gpio_num, FILE=filename, ID=playback_id)
     irrp2.main()
