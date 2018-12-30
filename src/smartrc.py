@@ -9,7 +9,7 @@ Created on Sun Dec 30 09:12:02 2018
 
 from os import path
 from slackclient import SlackClient
-from read_cfg import ReadSetting, InitializeSetting
+from setting.read_cfg import ReadSetting, InitializeSetting
 
 
 class SmartRemoteControl:
@@ -30,6 +30,7 @@ class SmartRemoteControl:
         channel_id = self.get_smartrc_channel_id(init_sc)
         init_setting.write_channel_id(channel_id)
         self.read_setting()
+        self.make_slackbot_settings()
         msg =\
             "{} was added in '# smartrc' channel".format(self.setting.location)
         self.send_a_message(msg)
@@ -39,6 +40,19 @@ class SmartRemoteControl:
         for channel in channels_list["channels"]:
             if channel["name"] == "smartrc":
                 return channel["id"]
+
+    def make_slackbot_settings(self):
+        filename =\
+            path.join(self.smartrc_dir,
+                      "smartrc_slackbot/slackbot_settings.py")
+        msg = (r"#!/usr/bin/env python3\n"
+               r"# -*- coding: utf-8 -*-\n\n"
+               r"API_TOKEN = '{api_token}'\n"
+               r"DEFAULT_REPLY = '{default_reply}'\n"
+               r"PLUGINS = ['src']\n")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(msg.format(api_token=self.setting.slack_token,
+                               default_reply=self.setting.default_reply))
 
     def send_a_message(self, text):
         self.sc.api_call(
