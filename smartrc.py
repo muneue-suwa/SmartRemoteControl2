@@ -11,7 +11,7 @@ from os import path
 from slackclient import SlackClient
 from setting.read_cfg import ReadSetting, InitializeSetting
 
-from smartrc_slackbot.src import record, playback
+from smartrc_slackbot.src import record, playback, upload
 
 
 class SmartRemoteControl:
@@ -73,7 +73,13 @@ class SmartRemoteControl:
                       playback_id=playback_id,
                       smartrc_dir=self.smartrc_dir)
 
+    def backup(self):
+        upload.main(slack_token=self.setting.slack_token,
+                    channel_id=self.setting.channel_id,
+                    smartrc_dir=self.smartrc_dir)
+
+
 if __name__ == "__main__":
     smartrc_dir = path.expanduser("~/Git/SmartRemoteControl2")
     smartrc = SmartRemoteControl(smartrc_dir)
-    smartrc.init()
+    smartrc.backup()
