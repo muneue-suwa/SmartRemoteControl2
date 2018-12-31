@@ -1,0 +1,13 @@
+[SLACK]
+SLACK_API_TOKEN =
+
+[BASIC]
+LOCATION = my_smartrc
+is_WITH_RECODER = False
+
+[SLACKBOT]
+DEFAULT_REPLY = "Sorry but I didn't understand you"
+
+[GPIO]
+RECORD = 18
+PLAYBACK = 17

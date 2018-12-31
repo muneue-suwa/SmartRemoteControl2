@@ -20,7 +20,7 @@ class ReadSetting:
         self.slack_token = self.config["SLACK"]["SLACK_API_TOKEN"]
         self.channel_id = self.config["SLACK"]["CHANNEL_ID"]
         self.location = self.config["BASIC"]["LOCATION"]
-        self.mode = bool(self.config["BASIC"]["MODE"])
+        self.mode = bool(self.config["BASIC"]["is_WITH_RECODER"])
         self.default_reply = self.config["SLACKBOT"]["DEFAULT_REPLY"]
         if self.mode:
             self.gpio_record = int(self.config["GPIO"]["RECORD"])
