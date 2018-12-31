@@ -47,11 +47,11 @@ class SmartRemoteControl:
         filename =\
             path.join(self.smartrc_dir,
                       "smartrc_slackbot/slackbot_settings.py")
-        msg = (r"#!/usr/bin/env python3\n"
-               r"# -*- coding: utf-8 -*-\n\n"
-               r"API_TOKEN = '{api_token}'\n"
-               r"DEFAULT_REPLY = '{default_reply}'\n"
-               r"PLUGINS = ['src']\n")
+        msg = ("#!/usr/bin/env python3\n"
+               "# -*- coding: utf-8 -*-\n\n"
+               'API_TOKEN = "{api_token}"\n'
+               'DEFAULT_REPLY = "{default_reply}"\n'
+               'PLUGINS = ["src"]\n')
         with open(filename, "w", encoding="utf-8") as f:
             f.write(msg.format(api_token=self.setting.slack_token,
                                default_reply=self.setting.default_reply))

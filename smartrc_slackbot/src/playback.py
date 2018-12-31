@@ -6,7 +6,7 @@ Created on Sun Dec 30 22:16:48 2018
 @author: crantu
 """
 
-from irrp_2 import IRRP2
+from .irrp_2 import IRRP2
 from os import path
 
 
