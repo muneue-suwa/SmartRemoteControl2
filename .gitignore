@@ -2,4 +2,5 @@
 env/
 setting/smartrc.cfg
 setting/.smartrc.cfg
+smartrc_slackbot/slackbot_settings.py
 smartrc_slackbot/src/__pycache__/
