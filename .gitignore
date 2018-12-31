@@ -1,4 +1,5 @@
-*/__pycache__
+*/__pycache__/
 env/
 setting/smartrc.cfg
 setting/.smartrc.cfg
+smartrc_slackbot/src/__pycache__/
