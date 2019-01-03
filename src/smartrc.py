@@ -10,7 +10,7 @@ Created on Sun Dec 30 09:12:02 2018
 from os import path
 from slackclient import SlackClient
 from argparse import ArgumentParser
-from read_cfg import ReadSetting, InitializeSetting
+from config import ReadSetting, InitializeSetting
 
 import record
 import playback
@@ -97,9 +97,9 @@ class SmartRemoteControl:
         if command == "backup":
             pass
         elif command == "send" or command == "playback":
-            self.rec_ply_common(self.send)
+            self.rcd_ply_common(self.send)
         elif command == "learn" or command == "record":
-            self.rec_ply_common(self.learn)
+            self.rcd_ply_common(self.learn)
         elif command == "recovery":
             pass
         elif command == "init":
@@ -107,20 +107,20 @@ class SmartRemoteControl:
         elif command == "update":
             pass
 
-    def rec_ply_common(self, rec_ply_func):
-        rec_ply_mode_str = self.arguments.command[0]
-        rec_ply_id = self.arguments.record_playback_id
-        if not rec_ply_id:
-            rec_ply_id = input("Input {} ID: ".format(rec_ply_mode_str))
+    def rcd_ply_common(self, rcd_ply_func):
+        rcd_ply_mode_str = self.arguments.command[0]
+        rcd_ply_id = self.arguments.record_playback_id
+        if not rcd_ply_id:
+            rcd_ply_id = input("Input {} ID: ".format(rcd_ply_mode_str))
 
         id_yn = input("Are you sure"
                       " to decide the {} id?:"
-                      " {} (y/n): ".format(rec_ply_mode_str, rec_ply_id))
+                      " {} (y/n): ".format(rcd_ply_mode_str, rcd_ply_id))
         if not id_yn.lower() == "y":
             print("Canceled")
             return False
 
-        rec_ply_func(rec_ply_id)
+        rcd_ply_func(rcd_ply_id)
         return True
 
 if __name__ == "__main__":
