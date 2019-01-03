@@ -96,6 +96,8 @@ class SmartRemoteControl:
                       "was ignored".format(self.arguments.record_playback_id))
         if command == "backup":
             pass
+        elif command == "share":
+            pass
         elif command == "send" or command == "playback":
             self.rcd_ply_common(self.send)
         elif command == "learn" or command == "record":
