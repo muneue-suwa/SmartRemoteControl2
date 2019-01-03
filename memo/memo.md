@@ -27,6 +27,9 @@ Python 3.5.3
 - share
   - 受信機能のついたものからついていないものに学習したデータを送信する
   - `download.py` && `upload.py`
+- list
+  - `irrp_2.json` を読み込み，`rcd_ply_id` のリストを表示する
+  - `read_rcd_ply_idlist.py`
 
 ### コマンド
 - backup: `smartrc backup`
@@ -48,6 +51,7 @@ SmartRemoteControl2/
     download.py  # file 関連
     upload.py  # file 関連
     irrp_2.py
+    config.py
   log/
   setting/
     smartrc.cfg.default  # defaultのもの
