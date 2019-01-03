@@ -1,9 +1,12 @@
-*/__pycache__/
-smartrc_slackbot/src/__pycache__/
+# pycache
+src/__pycache__/
 
+# venv directory
 env/
+
+# data files
 data/
 
+# setting files
 setting/smartrc.cfg
 setting/.smartrc.cfg
-smartrc_slackbot/slackbot_settings.py
