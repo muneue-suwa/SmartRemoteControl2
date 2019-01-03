@@ -76,7 +76,7 @@ class SmartRemoteControl:
 
     def get_arguments(self):
         parser = ArgumentParser()
-        commands = ["backup", "share", "send", "palyback",
+        commands = ["backup", "share", "send", "playback",
                     "learn", "record", "recovery", "init", "update"]
         parser.add_argument("command", nargs=1, type=str,
                             choices=commands,
@@ -89,14 +89,17 @@ class SmartRemoteControl:
 
     def main(self):
         self.get_arguments()
-        command = self.arguments.command
-        print(self.arguments.record_playback_id)
+        command = self.arguments.command[0]
+        if self.arguments.record_playback_id:
+            if command not in ["send", "playback", "learn", "record"]:
+                print("The argument '{}' "
+                      "was ignored".format(self.arguments.record_playback_id))
         if command == "backup":
             pass
-        elif command == "send" or command == "palyback":
-            pass
+        elif command == "send" or command == "playback":
+            self.rec_ply_common(self.send)
         elif command == "learn" or command == "record":
-            pass
+            self.rec_ply_common(self.learn)
         elif command == "recovery":
             pass
         elif command == "init":
@@ -104,6 +107,21 @@ class SmartRemoteControl:
         elif command == "update":
             pass
 
+    def rec_ply_common(self, rec_ply_func):
+        rec_ply_mode_str = self.arguments.command[0]
+        rec_ply_id = self.arguments.record_playback_id
+        if not rec_ply_id:
+            rec_ply_id = input("Input {} ID: ".format(rec_ply_mode_str))
+
+        id_yn = input("Are you sure"
+                      " to decide the {} id?:"
+                      " {} (y/n): ".format(rec_ply_mode_str, rec_ply_id))
+        if not id_yn.lower() == "y":
+            print("Canceled")
+            return False
+
+        rec_ply_func(rec_ply_id)
+        return True
 
 if __name__ == "__main__":
     smartrc_dir = path.expanduser("~/Git/SmartRemoteControl2")
