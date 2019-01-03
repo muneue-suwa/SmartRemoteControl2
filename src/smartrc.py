@@ -9,9 +9,13 @@ Created on Sun Dec 30 09:12:02 2018
 
 from os import path
 from slackclient import SlackClient
-from setting.read_cfg import ReadSetting, InitializeSetting
+from argparse import ArgumentParser
+from read_cfg import ReadSetting, InitializeSetting
 
-from smartrc_slackbot.src import record, playback, upload, download
+import record
+import playback
+import upload
+# import download
 
 
 class SmartRemoteControl:
@@ -23,7 +27,7 @@ class SmartRemoteControl:
             self.read_setting()
 
     def read_setting(self):
-        self.setting = ReadSetting(smartrc_dir)
+        self.setting = ReadSetting(self.smartrc_dir)
         self.sc = SlackClient(self.setting.slack_token)
 
     def init(self):
@@ -32,7 +36,6 @@ class SmartRemoteControl:
         channel_id = self.get_smartrc_channel_id(init_sc)
         init_setting.write_channel_id(channel_id)
         self.read_setting()
-        self.make_slackbot_settings()
         msg =\
             "{} was added in '# smartrc' channel".format(self.setting.location)
         self.send_a_message(msg)
@@ -42,19 +45,6 @@ class SmartRemoteControl:
         for channel in channels_list["channels"]:
             if channel["name"] == "smartrc":
                 return channel["id"]
-
-    def make_slackbot_settings(self):
-        filename =\
-            path.join(self.smartrc_dir,
-                      "smartrc_slackbot/slackbot_settings.py")
-        msg = ("#!/usr/bin/env python3\n"
-               "# -*- coding: utf-8 -*-\n\n"
-               'API_TOKEN = "{api_token}"\n'
-               'DEFAULT_REPLY = "{default_reply}"\n'
-               'PLUGINS = ["src"]\n')
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(msg.format(api_token=self.setting.slack_token,
-                               default_reply=self.setting.default_reply))
 
     def send_a_message(self, text):
         self.sc.api_call(
@@ -84,8 +74,38 @@ class SmartRemoteControl:
                                smartrc_dir=self.smartrc_dir)
         dl.main()
 
+    def get_arguments(self):
+        parser = ArgumentParser()
+        commands = ["backup", "share", "send", "palyback",
+                    "learn", "record", "recovery", "init", "update"]
+        parser.add_argument("command", nargs=1, type=str,
+                            choices=commands,
+                            help="startrc command")
+        parser.add_argument("record_playback_id", nargs="?", type=str,
+                            # choices=commands,
+                            default=None,
+                            help="record or playback id")
+        self.arguments = parser.parse_args()
+
+    def main(self):
+        self.get_arguments()
+        command = self.arguments.command
+        print(self.arguments.record_playback_id)
+        if command == "backup":
+            pass
+        elif command == "send" or command == "palyback":
+            pass
+        elif command == "learn" or command == "record":
+            pass
+        elif command == "recovery":
+            pass
+        elif command == "init":
+            self.init()
+        elif command == "update":
+            pass
+
 
 if __name__ == "__main__":
     smartrc_dir = path.expanduser("~/Git/SmartRemoteControl2")
     smartrc = SmartRemoteControl(smartrc_dir)
-    smartrc.recovery()
+    smartrc.main()
