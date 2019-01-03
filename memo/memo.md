@@ -20,7 +20,7 @@ Python 3.5.3
   - `send.py`
 - backup
   - Slack に `data/` のファイルをアップロードし，バックアップする．
-  - `backup.py`
+  - `backup_irrp_2_json.py`
 - recovery
   - Slack にアップロードファイルをダウンロード，リカバリーする．
   - `download.py`
@@ -52,6 +52,7 @@ SmartRemoteControl2/
     upload.py  # file 関連
     irrp_2.py
     config.py
+    backup_irrp_2_json.py
   log/
   setting/
     smartrc.cfg.default  # defaultのもの
