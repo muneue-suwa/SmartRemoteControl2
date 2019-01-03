@@ -68,7 +68,7 @@ SmartRemoteControl2/
 - その他設定が必要なもの
 
 ## install.sh
-```shell
+```bash
 export PATH=${PATH}:/to/the/smartrc.sh/path
 ```
 
@@ -83,6 +83,37 @@ def listen_to(matchstr, flags=0):
         return func
 
     return wrapper
+```
+
+## share() について
+`irrp_2_*.json` の中身を文字列に変えて，slackにメッセージとしてアップする．
+`[data_n]`が1,024文字づつになるようにする．
+1. `from_smartrc_bot [filename] START_IRRP_2_JSON [data_1]`
+1. `from_smartrc_bot [filename] CONTINUE_IRRP_2_JSON [data_2]`
+1. `from_smartrc_bot [filename] CONTINUE_IRRP_2_JSON [data_3]`
+1. `from_smartrc_bot [filename] CONTINUE_IRRP_2_JSON [data_n]`
+1. `from_smartrc_bot [filename] END_IRRP_2_JSON n`
+
+```python
+import json
+from pprint import pprint
+
+
+f = open("temp.json", "r")  # upload
+json_file = json.load(f)
+string = str(json_file).replace("'", '"').replace(" ", "")
+print("len:", len(string))
+print("string:", string)
+f.close()
+
+f2 = open("temp.temp", "w")  # download
+f2.write(string+"\n")
+f2.close()
+
+f3 = open("temp.temp", "r")  # checking
+json_file_3 = json.load(f3)
+pprint(json_file_3)
+f3.close()
 ```
 
 ## Slack など
