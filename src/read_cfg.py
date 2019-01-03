@@ -34,10 +34,12 @@ class ReadSetting:
 
 class InitializeSetting:
     def __init__(self, smartrc_dir):
-        self.config = configparser.ConfigParser()
-
         old_setting_filename =\
             path.join(smartrc_dir, "setting/smartrc.cfg")
+        if not path.isfile(old_setting_filename):
+            raise FileNotFoundError("setting/smartrc.cfg is not found")
+        self.config = configparser.ConfigParser()
+
         self.new_setting_filename =\
             path.join(smartrc_dir, "setting/.smartrc.cfg")
 
