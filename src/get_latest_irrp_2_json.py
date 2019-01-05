@@ -18,6 +18,9 @@ def get_latest_irrp_2_json(smartrc_dir):
     for filename in filenames:
         datetime_list.append(datetime.strptime(path.basename(filename),
                                                "irrp_2_%Y%m%d_%H%M%S.json"))
+    if not len(datetime_list) > 0:
+        print("No data file")
+        return None
 
     str_datetime = datetime.strftime(max(datetime_list), "%Y%m%d_%H%M%S")
     return path.join(smartrc_dir, "data/irrp_2_{}.json".format(str_datetime))
