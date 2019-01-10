@@ -7,13 +7,14 @@ Created on Sat Jan  5 09:41:35 2019
 """
 
 
-class SendMessageToSlack:
-    def __init__(self, slack_client_class):
+class SlackTools:
+    def __init__(self, slack_client_class, channel_id):
         self.sc = slack_client_class
+        self.channel_id = channel_id
 
     def send_a_message(self, text):
         self.sc.api_call(
           "chat.postMessage",
-          channel=self.setting.channel_id,
+          channel=self.channel_id,
           text=text
         )

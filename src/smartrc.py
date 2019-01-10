@@ -11,6 +11,7 @@ from os import path
 from slackclient import SlackClient
 from argparse import ArgumentParser
 from config import ReadSetting, InitializeSetting
+from slacktools import SlackTools
 
 import record
 import playback
@@ -29,6 +30,7 @@ class SmartRemoteControl:
     def read_setting(self):
         self.setting = ReadSetting(self.smartrc_dir)
         self.sc = SlackClient(self.setting.slack_token)
+        self.stool = SlackTools(self.sc, self.setting.channel_id)
 
     def init(self):
         init_setting = InitializeSetting(self.smartrc_dir)
@@ -38,20 +40,13 @@ class SmartRemoteControl:
         self.read_setting()
         msg =\
             "{} was added in '# smartrc' channel".format(self.setting.location)
-        self.send_a_message(msg)
+        self.stool.send_a_message(msg)
 
     def get_smartrc_channel_id(self, sc_class):
         channels_list = sc_class.api_call("channels.list")
         for channel in channels_list["channels"]:
             if channel["name"] == "smartrc":
                 return channel["id"]
-
-    def send_a_message(self, text):
-        self.sc.api_call(
-          "chat.postMessage",
-          channel=self.setting.channel_id,
-          text=text
-        )
 
     def learn(self, record_id):
         record.main(gpio_num=self.setting.gpio_record,

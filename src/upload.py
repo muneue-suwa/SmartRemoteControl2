@@ -12,6 +12,7 @@ from datetime import datetime
 import json
 from math import floor
 
+from slacktools import SlackTools
 from get_latest_irrp_2_json import get_latest_irrp_2_json
 
 
@@ -20,6 +21,7 @@ class Upload:
         self.sc = slack_client_class
         self.setting = setting_class
         self.smartrc_dir = smartrc_dir
+        self.stool = SlackTools(self.sc, self.setting.channel_id)
 
     def upload_text(self):
         filename = path.join(get_latest_irrp_2_json(self.smartrc_dir))
@@ -30,8 +32,10 @@ class Upload:
         string_len = len(string)
         for i in range(floor(string_len/1024)):
             print(string[:1024])
+            self.stool.send_a_message(string[:1024])
             string = string[1024:]
         print(string)
+        self.stool.send_a_message(string)
 
     def upload_file(self, channel_id, smartrc_dir):
         filename = path.join(get_latest_irrp_2_json(self.smartrc_dir))
