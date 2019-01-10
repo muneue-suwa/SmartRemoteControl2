@@ -24,8 +24,10 @@ class SmartRemoteControl:
         self.smartrc_dir = smartrc_dir
         setting_filename =\
             path.join(smartrc_dir, "setting/.smartrc.cfg")
+        self.is_settingfile = False
         if path.isfile(setting_filename):
             self.read_setting()
+            self.is_settingfile = True
 
     def read_setting(self):
         self.setting = ReadSetting(self.smartrc_dir)
