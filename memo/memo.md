@@ -31,6 +31,12 @@ Python 3.5.3
   - `irrp_2.json` を読み込み，`rcd_ply_id` のリストを表示する
   - `read_rcd_ply_idlist.py`
 
+### Raspberry PI から
+`init (update)`, `send (playback)`, `learn (record)`, `backup`, `recovery`, `share`, `list`
+
+### Google Home（slack） から
+`send (playback)`, `list`
+
 ### コマンド
 - backup: `smartrc backup`
 - share: `smartrc share`
