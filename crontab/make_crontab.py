@@ -12,8 +12,8 @@ import sys
 
 def make_crontab():
     INSTALL_SH_DIRNAME = sys.argv[1]
-    smartrc_bot_crontab = (r"@reboot bash "
-                           r"{install_sh_dirname}/src"
+    smartrc_bot_crontab = (r"@reboot python3 "
+                           r"{install_sh_dirname}/src/run.py"
                            r" >> {install_sh_dirname}/log/"
                            r"smartrc_bot_$(date +\%Y\%m\%d_\%H\%M\%S).log"
                            r" 2>&1")
