@@ -43,6 +43,7 @@ Python 3.5.3
 ```
 SmartRemoteControl2/
   data/
+    smartrc_yyyymmdd_hhmmss.irrp
   src/
     smartrc.py  # main，smartrc を RaspberryPI から直接コマンドで操作できるようにする．
     run.py  # main for slackbot
@@ -50,9 +51,9 @@ SmartRemoteControl2/
     playback.py  # gpio 関連
     download.py  # file 関連
     upload.py  # file 関連
-    irrp_2.py
+    irrp_with_class.py
     config.py
-    backup_irrp_2_json.py
+    backup_irrp_file.py
   log/
   setting/
     smartrc.cfg.default  # defaultのもの
@@ -88,12 +89,11 @@ def listen_to(matchstr, flags=0):
 
 ## share() について
 `irrp_2_*.json` の中身を文字列に変えて，slackにメッセージとしてアップする．
-`[data_n]`が1,024文字づつになるようにする．
-1. `from_smartrc_bot [filename] START_IRRP_2_JSON [data_1]`
-1. `from_smartrc_bot [filename] CONTINUE_IRRP_2_JSON [data_2]`
-1. `from_smartrc_bot [filename] CONTINUE_IRRP_2_JSON [data_3]`
-1. `from_smartrc_bot [filename] CONTINUE_IRRP_2_JSON [data_n]`
-1. `from_smartrc_bot [filename] END_IRRP_2_JSON n`
+1. `from_smartrc_bot [filename] START_IRRP_FILE [data_1]`
+1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_2]`
+1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_3]`
+1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_n]`
+1. `from_smartrc_bot [filename] END_IRRP_FILE`
 
 ```python
 import json
