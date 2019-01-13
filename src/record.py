@@ -10,17 +10,15 @@ Created on Sun Dec 30 21:59:42 2018
 from os import path
 from datetime import datetime
 
-from irrp_2 import IRRP2
+from irrp_with_class import IRRP
 
 
 def main(gpio_num, record_id, smartrc_dir):
     str_datetime = datetime.strftime(datetime.today(), "%Y%m%d_%H%M%S")
     filename = path.join(smartrc_dir,
                          "data/irrp_2_{}.json".format(str_datetime))
-    irrp2 = IRRP2(PLAY=False, RECORD=True,
-                  GPIO=gpio_num, FILE=filename, ID=record_id,
-                  NO_CONFIRM=True, POST_MS=130)
-    irrp2.main()
+    irrp = IRRP(gpio=gpio_num, filename=filename, post=130, no_confirm=True)
+    irrp.record(record_id)
 
 
 if __name__ == "__main__":
