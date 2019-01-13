@@ -20,8 +20,6 @@ class RunSmartrcBot(SmartRemoteControl):
         if not self.is_settingfile:
             raise FileNotFoundError("smartrc setting file is not found")
         self.smartrc_pattern = re.compile(r'smartrc.*')
-        # self.commands = ["backup", "share", "send", "playback",
-        #                  "learn", "record", "recovery", "init", "update"]
 
     def main(self):
         if self.sc.rtm_connect():
@@ -30,11 +28,13 @@ class RunSmartrcBot(SmartRemoteControl):
                     msg = self.sc.rtm_read()
                     print("msg_raw:", msg)
                     if "text" in msg[0]:
-                        print("msg_human:", msg[0]["text"])
-                        self.analyze_message(msg[0]["text"])
+                        message = msg[0]["text"]
+                        print("msg_human:", message)
+                        self.analyze_message(message)
                     elif "attachments" in msg[0]:
-                        print("msg_bot:", msg[0]["attachments"][0]["fallback"])
-                        self.analyze_message(msg[0]["attachments"][0]["fallback"])
+                        message = msg[0]["attachments"][0]["fallback"]
+                        print("msg_bot:", message)
+                        self.analyze_message(message)
                 except IndexError:
                     pass
                 except KeyError:
@@ -49,20 +49,14 @@ class RunSmartrcBot(SmartRemoteControl):
             print(message)
             splited_msg = message.split()
             try:
-                if splited_msg[1] == "backup":
-                    pass
-                elif splited_msg[1] == "share":
-                    pass
-                elif splited_msg[1] == "send" or splited_msg[1] == "playback":
+                if splited_msg[1] == "send" or splited_msg[1] == "playback":
                     self.send(playback_id=splited_msg[2])
-                elif splited_msg[1] == "learn" or splited_msg[1] == "record":
-                    pass
-                elif splited_msg[1] == "recovery":
-                    pass
-                elif splited_msg[1] == "init":
-                    pass
-                elif splited_msg[1] == "update":
-                    pass
+                elif splited_msg[1] == "list":
+                    id_list = self.irrpfile.get_id_list()
+                    if id_list is False:
+                        self.stool.send_a_message("No irrp file")
+                    else:
+                        self.stool.send_a_message(str(id_list))
             except IndexError:
                 pass
 
