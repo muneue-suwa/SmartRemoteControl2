@@ -24,10 +24,14 @@ class IRRPFile:
         return filename
 
     def get_id_list(self):
-        with open(self.get_latest_filename(), "r") as irrp:
-            irrp_dict = json.load(irrp)
+        filename = self.get_latest_filename()
+        if filename is None:
+            return False
+        else:
+            with open(filename, "r") as irrp:
+                irrp_dict = json.load(irrp)
 
-        return list(irrp_dict.keys())
+            return list(irrp_dict.keys())
 
     def get_latest_filename(self):
         filenames = glob(path.join(self.smartrc_dir, "data/smartrc_*.irrp"))

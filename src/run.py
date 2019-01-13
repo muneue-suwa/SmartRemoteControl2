@@ -54,8 +54,7 @@ class RunSmartrcBot(SmartRemoteControl):
                 elif splited_msg[1] == "share":
                     pass
                 elif splited_msg[1] == "send" or splited_msg[1] == "playback":
-                    if splited_msg[2] in self.irrpfile.get_id_list():
-                        self.send(playback_id=splited_msg[2])
+                    self.send(playback_id=splited_msg[2])
                 elif splited_msg[1] == "learn" or splited_msg[1] == "record":
                     pass
                 elif splited_msg[1] == "recovery":
