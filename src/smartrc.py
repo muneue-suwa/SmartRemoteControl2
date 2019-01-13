@@ -10,11 +10,12 @@ Created on Sun Dec 30 09:12:02 2018
 from os import path
 from slackclient import SlackClient
 from argparse import ArgumentParser
+
 from config import ReadSetting, InitializeSetting
 from slacktools import SlackTools
+from irrp_file import IRRPFile
 
-import record
-import playback
+from irrp_with_class import IRRP
 import upload
 # import download
 
@@ -28,6 +29,7 @@ class SmartRemoteControl:
         if path.isfile(setting_filename):
             self.read_setting()
             self.is_settingfile = True
+            self.irrpfile = IRRPFile(smartrc_dir=smartrc_dir)
 
     def read_setting(self):
         self.setting = ReadSetting(self.smartrc_dir)
@@ -51,14 +53,15 @@ class SmartRemoteControl:
                 return channel["id"]
 
     def learn(self, record_id):
-        record.main(gpio_num=self.setting.gpio_record,
-                    record_id=record_id,
-                    smartrc_dir=self.smartrc_dir)
+        irrp = IRRP(gpio=self.setting.gpio_record,
+                    filename=self.irrpfile.get_new_filename(),
+                    post=130, no_confirm=True)
+        irrp.record(record_id)
 
     def send(self, playback_id):
-        playback.main(gpio_num=self.setting.gpio_record,
-                      playback_id=playback_id,
-                      smartrc_dir=self.smartrc_dir)
+        irrp = IRRP(gpio=self.setting.gpio_playback,
+                    filename=self.irrpfile.get_latest_filename())
+        irrp.playback(playback_id)
 
     def backup(self):
         upload.main(slack_token=self.setting.slack_token,

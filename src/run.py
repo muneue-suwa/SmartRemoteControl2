@@ -20,11 +20,8 @@ class RunSmartrcBot(SmartRemoteControl):
         if not self.is_settingfile:
             raise FileNotFoundError("smartrc setting file is not found")
         self.smartrc_pattern = re.compile(r'smartrc.*')
-        self.commands = ["backup", "share", "send", "playback",
-                         "learn", "record", "recovery", "init", "update"]
-        self.command_patterns =\
-            {command: re.compile(r'smartrc\s{}\s'.format(command))
-                for command in self.commands}
+        # self.commands = ["backup", "share", "send", "playback",
+        #                  "learn", "record", "recovery", "init", "update"]
 
     def main(self):
         if self.sc.rtm_connect():
@@ -45,23 +42,24 @@ class RunSmartrcBot(SmartRemoteControl):
     def analyze_message(self, message):
         if self.smartrc_pattern.match(message):
             print(message)
-            if self.command_patterns["backup"]:
-                pass
-            elif self.command_patterns["share"]:
-                pass
-            elif self.command_patterns["send"]:
-                pass
-            elif self.command_patterns["playback"]:
-                pass
-            elif self.command_patterns["learn"]:
-                pass
-            elif self.command_patterns["record"]:
-                pass
-            elif self.command_patterns["recovery"]:
-                pass
-            elif self.command_patterns["init"]:
-                pass
-            elif self.command_patterns["update"]:
+            splited_msg = message.split()
+            try:
+                if splited_msg[1] == "backup":
+                    pass
+                elif splited_msg[1] == "share":
+                    pass
+                elif splited_msg[1] == "send" or splited_msg[1] == "playback":
+                    if splited_msg[2] in self.irrpfile.get_id_list():
+                        self.send(playback_id=splited_msg[2])
+                elif splited_msg[1] == "learn" or splited_msg[1] == "record":
+                    pass
+                elif splited_msg[1] == "recovery":
+                    pass
+                elif splited_msg[1] == "init":
+                    pass
+                elif splited_msg[1] == "update":
+                    pass
+            except IndexError:
                 pass
 
 

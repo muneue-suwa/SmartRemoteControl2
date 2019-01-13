@@ -13,7 +13,11 @@ import json
 from math import floor
 
 from slacktools import SlackTools
+<<<<<<< HEAD
 from get_latest_irrp_filename import IRRPFile
+=======
+from irrp_file import IRRPFile
+>>>>>>> Add irrp_file.py and move features of record and playback to smartrc.py
 
 
 class Upload:
