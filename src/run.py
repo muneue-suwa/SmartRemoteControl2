@@ -46,18 +46,18 @@ class RunSmartrcBot(SmartRemoteControl):
 
     def analyze_message(self, message):
         if self.smartrc_pattern.match(message):
-            print(message)
             splited_msg = message.split()
             try:
                 if splited_msg[1] == "send" or splited_msg[1] == "playback":
-                    self.send(playback_id=splited_msg[2])
+                    self.print_std_sc(self.send(playback_id=splited_msg[2]))
                 elif splited_msg[1] == "list":
-                    try:
-                        self.stool.send_a_message(self.irrpfile.get_id_list())
-                    except FileNotFoundError as err:
-                        self.stool.send_a_message(err)
+                    self.print_std_sc(self.show_id_list())
             except IndexError:
                 pass
+
+    def print_std_sc(self, message):
+        print(message)
+        self.stool.send_a_message(message)
 
 
 if __name__ == "__main__":

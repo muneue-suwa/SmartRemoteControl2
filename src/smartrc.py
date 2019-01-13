@@ -65,8 +65,9 @@ class SmartRemoteControl:
                 irrp = IRRP(gpio=self.setting.gpio_playback,
                             filename=filename)
                 irrp.playback(playback_id)
+            return "Sending {}".format(playback_id)
         except FileNotFoundError as err:
-            self.stool.send_a_message(err)
+            return err
 
     def backup(self):
         upload.main(slack_token=self.setting.slack_token,
@@ -78,6 +79,12 @@ class SmartRemoteControl:
                                channel_id=self.setting.channel_id,
                                smartrc_dir=self.smartrc_dir)
         dl.main()
+
+    def show_id_list(self):
+        try:
+            return self.irrpfile.get_id_list()
+        except FileNotFoundError as err:
+            return err
 
     def get_arguments(self):
         parser = ArgumentParser()
