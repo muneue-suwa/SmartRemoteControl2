@@ -28,8 +28,10 @@ class RunSmartrcBot(SmartRemoteControl):
             while self.sc.server.connected is True:
                 try:
                     msg = self.sc.rtm_read()
-                    print("msg:", msg[0]["text"])
+                    print("msg_human:", msg[0]["text"])
+                    print("msg_bot:", msg[0]["attachments"][0]["fallback"])
                     self.analyze_message(msg[0]["text"])
+                    self.analyze_message(msg[0]["attachments"][0]["fallback"])
                 except IndexError:
                     pass
                 except KeyError:
