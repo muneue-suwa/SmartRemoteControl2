@@ -9,11 +9,11 @@ Created on Sun Dec 30 22:16:48 2018
 from irrp_with_class import IRRP
 from os import path
 
-from get_latest_irrp_2_json import get_latest_irrp_2_json
+from get_latest_irrp_filename import get_latest_irrp_filename
 
 
 def main(gpio_num, playback_id, smartrc_dir):
-    filename = path.join(get_latest_irrp_2_json(smartrc_dir))
+    filename = path.join(get_latest_irrp_filename(smartrc_dir))
     irrp = IRRP(gpio=gpio_num, filename=filename)
     irrp.playback(playback_id)
 

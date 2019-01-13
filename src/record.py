@@ -16,7 +16,7 @@ from irrp_with_class import IRRP
 def main(gpio_num, record_id, smartrc_dir):
     str_datetime = datetime.strftime(datetime.today(), "%Y%m%d_%H%M%S")
     filename = path.join(smartrc_dir,
-                         "data/irrp_2_{}.json".format(str_datetime))
+                         "data/smartrc_{}.irrp".format(str_datetime))
     irrp = IRRP(gpio=gpio_num, filename=filename, post=130, no_confirm=True)
     irrp.record(record_id)
 
