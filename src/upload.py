@@ -13,18 +13,19 @@ import json
 from math import floor
 
 from slacktools import SlackTools
-from get_latest_irrp_filename import get_latest_irrp_filename
+from get_latest_irrp_filename import IRRPFile
 
 
 class Upload:
     def __init__(self, slack_client_class, setting_class, smartrc_dir):
         self.sc = slack_client_class
         self.setting = setting_class
-        self.smartrc_dir = smartrc_dir
+        # self.smartrc_dir = smartrc_dir
         self.stool = SlackTools(self.sc, self.setting.channel_id)
+        self.irrpfile = IRRPFile(smartrc_dir=smartrc_dir)
 
     def upload_text(self):
-        filename = path.join(get_latest_irrp_filename(self.smartrc_dir))
+        filename = path.join(self.irrpfile.get_latest_filename())
         with open(filename, "r") as irrp_2:
             json_file = json.load(irrp_2)
             string = str(json_file).replace("'", '"').replace(" ", "")
@@ -37,8 +38,8 @@ class Upload:
         print(string)
         self.stool.send_a_message(string)
 
-    def upload_file(self, channel_id, smartrc_dir):
-        filename = path.join(get_latest_irrp_filename(self.smartrc_dir))
+    def upload_file(self, channel_id):
+        filename = path.join(self.irrpfile.get_latest_filename())
         files = {'file': open(filename, 'r')}
         param = {
             'token': self.setting.slack_token,
