@@ -59,8 +59,8 @@ class SmartRemoteControl:
         irrp.record(record_id)
 
     def send(self, playback_id):
-        filename = self.irrpfile.get_latest_filename()
         try:
+            filename = self.irrpfile.get_latest_filename()
             if playback_id in self.irrpfile.get_id_list():
                 irrp = IRRP(gpio=self.setting.gpio_playback,
                             filename=filename)
