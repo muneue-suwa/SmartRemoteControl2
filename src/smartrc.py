@@ -59,8 +59,12 @@ class SmartRemoteControl:
         irrp.record(record_id)
 
     def send(self, playback_id):
+        filename = self.irrpfile.get_latest_filename()
+        if filename is None:
+            self.stool.send_a_message("irrp file could not be found")
+            return False
         irrp = IRRP(gpio=self.setting.gpio_playback,
-                    filename=self.irrpfile.get_latest_filename())
+                    filename=filename)
         irrp.playback(playback_id)
 
     def backup(self):
