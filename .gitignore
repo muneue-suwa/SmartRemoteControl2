@@ -10,3 +10,7 @@ data/
 # setting files
 setting/smartrc.cfg
 setting/.smartrc.cfg
+
+# crontab
+log/
+crontab/smartrc_bot.crontab
