@@ -52,11 +52,10 @@ class RunSmartrcBot(SmartRemoteControl):
                 if splited_msg[1] == "send" or splited_msg[1] == "playback":
                     self.send(playback_id=splited_msg[2])
                 elif splited_msg[1] == "list":
-                    id_list = self.irrpfile.get_id_list()
-                    if id_list is False:
-                        self.stool.send_a_message("No irrp file")
-                    else:
-                        self.stool.send_a_message(str(id_list))
+                    try:
+                        self.stool.send_a_message(self.irrpfile.get_id_list())
+                    except FileNotFoundError as err:
+                        self.stool.send_a_message(err)
             except IndexError:
                 pass
 

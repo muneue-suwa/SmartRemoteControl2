@@ -25,13 +25,10 @@ class IRRPFile:
 
     def get_id_list(self):
         filename = self.get_latest_filename()
-        if filename is None:
-            return False
-        else:
-            with open(filename, "r") as irrp:
-                irrp_dict = json.load(irrp)
+        with open(filename, "r") as irrp:
+            irrp_dict = json.load(irrp)
 
-            return list(irrp_dict.keys())
+        return list(irrp_dict.keys())
 
     def get_latest_filename(self):
         filenames = glob(path.join(self.smartrc_dir, "data/smartrc_*.irrp"))
@@ -41,8 +38,7 @@ class IRRPFile:
                     datetime.strptime(path.basename(filename),
                                       "smartrc_%Y%m%d_%H%M%S.irrp"))
         if not len(datetime_list) > 0:
-            print("No data file")
-            return None
+            raise FileNotFoundError("irrpfile could not be found")
 
         str_datetime = datetime.strftime(max(datetime_list), "%Y%m%d_%H%M%S")
         return path.join(self.smartrc_dir,
