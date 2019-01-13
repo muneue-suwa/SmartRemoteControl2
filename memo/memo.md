@@ -14,13 +14,10 @@ Python 3.5.3
   - `slack` の `token` 等を確認する．
 - send (playback)
   - 赤外線を送信する
-  - `playback.py`
 - learn (record)
   - 赤外線を学習する
-  - `send.py`
 - backup
   - Slack に `data/` のファイルをアップロードし，バックアップする．
-  - `backup_irrp_2_json.py`
 - recovery
   - Slack にアップロードファイルをダウンロード，リカバリーする．
   - `download.py`
@@ -29,7 +26,6 @@ Python 3.5.3
   - `download.py` && `upload.py`
 - list
   - `irrp_2.json` を読み込み，`rcd_ply_id` のリストを表示する
-  - `read_rcd_ply_idlist.py`
 
 ### Raspberry PI から
 `init (update)`, `send (playback)`, `learn (record)`, `backup`, `recovery`, `share`, `list`
@@ -40,9 +36,9 @@ Python 3.5.3
 ### コマンド
 - backup: `smartrc backup`
 - share: `smartrc share`
-- send (playback): `smartrc send *`, `smartrc playback *`
-- learn (record): `smartrc learn *`, `smartrc record *`
-- recovery: `smartrc recovery`
+- send (playback): `smartrc send [id]`, `smartrc playback [id]`
+- learn (record): `smartrc learn [id]`, `smartrc record [id]`
+- recovery: `smartrc recovery [url]`
 - init: `smartrc init`
 
 ## tree
@@ -51,15 +47,14 @@ SmartRemoteControl2/
   data/
     smartrc_yyyymmdd_hhmmss.irrp
   src/
-    smartrc.py  # main，smartrc を RaspberryPI から直接コマンドで操作できるようにする．
-    run.py  # main for slackbot
-    record.py  # gpio 関連
-    playback.py  # gpio 関連
-    download.py  # file 関連
-    upload.py  # file 関連
-    irrp_with_class.py
-    config.py
-    backup_irrp_file.py
+    irrp_file.py  # smartrc.irrp を操作するスクリプト
+    run.py  # slack bot のスクリプト
+    smartrc.py  # smartrc のベースとなるスクリプト，RaspberryPI から直接コマンドで操作できる．
+    config.py  # 設定ファイルを読み込むスクリプト
+    irrp_with_class.py  # irrp.py を外部から使用できるようにしたもの
+    slacktools.py  # slack-client を容易に使えるようにしたもの．
+    upload.py  # smartrc.irrp ファイルをアップロードするスクリプト
+    download.py  # smartrc.irrp ファイルをダウンロードするスクリプト
   log/
   setting/
     smartrc.cfg.default  # defaultのもの
@@ -99,7 +94,7 @@ def listen_to(matchstr, flags=0):
 1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_2]`
 1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_3]`
 1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_n]`
-1. `from_smartrc_bot [filename] END_IRRP_FILE`
+1. `from_smartrc_bot [filename] END_IRRP_FILE n`
 
 ```python
 import json

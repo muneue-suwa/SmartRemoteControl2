@@ -37,9 +37,9 @@ pip install -r pypi_requirements
     - `irrp.py` は `Public Domain` であるため，改変，再配布が可能
 - Google Homeとの連携：`IFTTT` と `slack` で行う．
 - dataのバックアップとシェア
-    - 親機（`parent`）：`slack` にファイルをアップロードする．
+    - 受信機付き（`withRecord`）：`slack` にファイルをアップロードする．
         - `crontab` で自動化，コマンドで制御
-    - 子機（`child`）：親機がファイルをアップロードしたら，自動で更新する．
+    - 送信機のみ（`onlyPlayback`）：親機がファイルをアップロードしたら，自動で更新する．
 - コマンド名：`smartrc` (`smart remote control`)
 
 ## 参考文献
