@@ -14,22 +14,32 @@ Codename:	stretch
 ```
 
 #### Python
-```
+```shell
 $ python3 --version
 Python 3.5.3
 ```
 
 #### venv について
 `env` ディレクトリがあるとき
-```shell-session:start_development
+```shell
 source env/bin/activate
 ```
 `env` ディレクトリがないとき
-```shell-session:start_development
+```shell
 python3 -m venv env && \
 source env/bin/activate && \
 pip install pip -U && \
 pip install -r pypi_requirements
+```
+
+## インストール
+```shell
+mkdir -p $HOME/Git && \
+cd $HOME/Git && \
+sudo apt install -y python3-pip python3-requests pigpio && \
+pip install slackclient && \
+git clone https://github.com/sik103/SmartRemoteControl2.git && \
+bash SmartRemoteControl2/install.sh
 ```
 
 ### 実装方法

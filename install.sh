@@ -8,8 +8,11 @@ INSTALL_SH_DIRNAME=`dirname $INSTALL_SH_FILENAME`
 mkdir -p $INSTALL_SH_DIRNAME/log
 mkdir -p $INSTALL_SH_DIRNAME/data
 
-# Install crontab
-python3 $INSTALL_SH_DIRNAME/installation/make_crontab.py $INSTALL_SH_DIRNAME
+# Install
+python3 $INSTALL_SH_DIRNAME/installation/make_installation_files.py $INSTALL_SH_DIRNAME
+## crontab
 crontab $INSTALL_SH_DIRNAME/installation/smartrc_bot.crontab
-
-# Install smartrc
+sudo crontab $INSTALL_SH_DIRNAME/installation/pigpiod.crontab
+## smartrc
+sudo mv $INSTALL_SH_DIRNAME/installation/smartrc /usr/local/bin/
+sudo chmod +x /usr/local/bin/smartrc
