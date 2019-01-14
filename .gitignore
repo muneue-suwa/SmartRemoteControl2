@@ -11,6 +11,6 @@ data/
 setting/smartrc.cfg
 setting/.smartrc.cfg
 
-# crontab
+# installation
 log/
-crontab/smartrc_bot.crontab
+installation/smartrc_bot.crontab
