@@ -21,7 +21,7 @@ class Upload:
         self.sc = slack_client_class
         self.setting = setting_class
         # self.smartrc_dir = smartrc_dir
-        self.stool = SlackTools(self.sc, self.setting.channel_id)
+        self.stool = SlackTools(self.sc, self.setting)
         self.irrpfile = IRRPFile(smartrc_dir=smartrc_dir)
 
     def upload_text(self):

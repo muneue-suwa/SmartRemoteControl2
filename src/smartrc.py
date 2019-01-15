@@ -34,7 +34,7 @@ class SmartRemoteControl:
     def read_setting(self):
         self.setting = ReadSetting(self.smartrc_dir)
         self.sc = SlackClient(self.setting.slack_token)
-        self.stool = SlackTools(self.sc, self.setting.channel_id)
+        self.stool = SlackTools(self.sc, self.setting)
 
     def init(self):
         init_setting = InitializeSetting(self.smartrc_dir)
