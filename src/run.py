@@ -10,6 +10,7 @@ Created on Sun Dec 30 22:36:06 2018
 from time import sleep
 from os import path
 import re
+import requests
 
 from smartrc import SmartRemoteControl
 
@@ -22,27 +23,41 @@ class RunSmartrcBot(SmartRemoteControl):
         self.smartrc_pattern = re.compile(r'smartrc.*')
 
     def main(self):
-        if self.sc.rtm_connect():
-            while self.sc.server.connected is True:
-                try:
-                    msg = self.sc.rtm_read()
-                    print("msg_raw:", msg)
-                    if "text" in msg[0]:
-                        message = msg[0]["text"]
-                        print("msg_human:", message)
-                        self.analyze_message(message)
-                    elif "attachments" in msg[0]:
-                        message = msg[0]["attachments"][0]["fallback"]
-                        print("msg_bot:", message)
-                        self.analyze_message(message)
-                except IndexError:
-                    pass
-                except KeyError:
-                    pass
-                finally:
-                    sleep(1)
-        else:
-            print("Connection Failed")
+        is_tryConnection = True
+        while is_tryConnection:
+            is_tryConnection = False
+            try:
+                self.try_connection()
+                if self.sc.rtm_connect(timeout=1):
+                    while self.sc.server.connected is True:
+                        try:
+                            msg = self.sc.rtm_read()
+                            print("msg_raw:", msg)
+                            if "text" in msg[0]:
+                                message = msg[0]["text"]
+                                print("msg_human:", message)
+                                self.analyze_message(message)
+                            elif "attachments" in msg[0]:
+                                message = msg[0]["attachments"][0]["fallback"]
+                                print("msg_bot:", message)
+                                self.analyze_message(message)
+                        except IndexError:
+                            pass
+                        except KeyError:
+                            pass
+                        except TimeoutError as err:
+                            print("TimeoutError: {}".format(err))
+                            sleep(60)
+                            is_tryConnection = True
+                            break
+                        finally:
+                            sleep(1)
+                else:
+                    print("Connection Failed")
+            except requests.exceptions.ConnectionError as err:
+                print("ConnectionError: {}".format(err))
+                sleep(60)
+                is_tryConnection = True
 
     def analyze_message(self, message):
         if self.smartrc_pattern.match(message):
@@ -58,6 +73,21 @@ class RunSmartrcBot(SmartRemoteControl):
     def print_std_sc(self, message):
         print(message)
         self.stool.send_a_message(message)
+
+    def try_connection(self):
+        param = {
+            'token': self.setting.slack_token,
+            'channel': self.setting.channel_id,
+            'text': "{} was connected to slack".format(self.setting.location),
+            'as_user': "false",
+            'username': self.setting.location
+        }
+        responce = requests.post(url="https://slack.com/api/chat.postMessage",
+                                 params=param)
+        print("Connected to slack")
+        print(param)
+        print("Connected to slack")
+        return responce
 
 
 if __name__ == "__main__":
