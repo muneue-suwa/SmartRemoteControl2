@@ -8,6 +8,9 @@ INSTALL_SH_DIRNAME=`dirname $INSTALL_SH_FILENAME`
 mkdir -p $INSTALL_SH_DIRNAME/log
 mkdir -p $INSTALL_SH_DIRNAME/data
 
+# Run smartrc.py init to make .smartrc.cfg
+python3 $INSTALL_SH_DIRNAME/src/smartrc.py init
+
 # Install
 python3 $INSTALL_SH_DIRNAME/installation/make_installation_files.py $INSTALL_SH_DIRNAME
 ## crontab

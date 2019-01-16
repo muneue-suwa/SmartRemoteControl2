@@ -9,6 +9,8 @@ Created on Sun Jan 13 11:26:22 2019
 from os import path
 import sys
 
+from config import ReadSetting
+
 
 class Installation:
     def __init__(self):
@@ -16,6 +18,7 @@ class Installation:
 
     def main(self):
         self.INSTALL_SH_DIRNAME = sys.argv[1]
+        self.setting = ReadSetting(self.INSTALL_SH_DIRNAME)
         self.dir_name = path.dirname(path.abspath(__file__))
         self.make_crontab()
         self.make_smartrc_file()
@@ -26,16 +29,16 @@ class Installation:
                                r" >> {install_sh_dirname}/log/"
                                r"smartrc_bot_$(date +\%Y\%m\%d_\%H\%M\%S).log"
                                r" 2>&1")
-        pigpiod_crontab = (r"@reboot pigpiod"
-                           r" > {install_sh_dirname}/log/"
-                           r"start_pigpiod_$(date +\%Y\%m\%d_\%H\%M\%S).log"
-                           r" 2>&1")
-
+        pigpiod_crontab = [r"@reboot until "
+                           "echo 'm {playback} w   w {playback} 0"
+                           "".format(playback=self.setting.gpio_playback),
+                           r"' > /dev/pigpio; do sleep 1s; done"]
+        if self.setting.mode:
+            pigpiod_crontab.insert(1, r"   m {record} r   pud {record} u"
+                                   "".format(record=self.setting.gpio_record))
         smartrc_bot_crontab =\
             smartrc_bot_crontab.format(
                     install_sh_dirname=self.INSTALL_SH_DIRNAME)
-        pigpiod_crontab = pigpiod_crontab.format(
-                install_sh_dirname=self.INSTALL_SH_DIRNAME)
 
         with open(path.join(self.dir_name, "smartrc_bot.crontab"), "w") as f1:
             f1.write(smartrc_bot_crontab)
@@ -43,7 +46,8 @@ class Installation:
         print(smartrc_bot_crontab)
 
         with open(path.join(self.dir_name, "pigpiod.crontab"), "w") as f3:
-            f3.write(pigpiod_crontab)
+            for pc in pigpiod_crontab:
+                f3.write(pc)
             f3.write("\n")
         print(pigpiod_crontab)
 

@@ -1,5 +1,6 @@
 # pycache
 src/__pycache__/
+installation/__pycache__/
 
 # venv directory
 env/
