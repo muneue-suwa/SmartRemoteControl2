@@ -9,8 +9,8 @@ env/
 data/
 
 # setting files
-setting/smartrc.cfg
-setting/.smartrc.cfg
+setting/*
+!setting/smartrc.cfg.default
 
 # installation
 log/
