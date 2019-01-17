@@ -14,6 +14,7 @@ from argparse import ArgumentParser
 from config import ReadSetting, InitializeSetting
 from slacktools import SlackTools
 from irrp_file import IRRPFile
+from exceptions import SlackClassNotFound, SlackTokenAuthError, SlackError
 
 from irrp_with_class import IRRP
 import upload
@@ -48,9 +49,16 @@ class SmartRemoteControl:
 
     def get_smartrc_channel_id(self, sc_class):
         channels_list = sc_class.api_call("channels.list")
+        if channels_list["ok"] is False:
+            if channels_list["error"] == "invalid_auth":
+                raise SlackTokenAuthError("Invalid authorization")
+            else:
+                raise SlackError(channels_list)
         for channel in channels_list["channels"]:
             if channel["name"] == "smartrc":
                 return channel["id"]
+        raise SlackClassNotFound("The channel '# smartrc' was not found")
+        # If Internet was not connected: requests.exceptions.ConnectionError
 
     def learn(self, record_id):
         irrp = IRRP(gpio=self.setting.gpio_record,
