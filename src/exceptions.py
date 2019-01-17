@@ -18,10 +18,10 @@ class SlackTokenAuthError(Exception):
 
 
 class SlackError(Exception):
-    """Exception raised for errors in the slack token.
+    """Exception raised for not expected errors in the slackclient.
 
     Attributes:
-        message -- explanation of the error
+        received_json -- received json when error was raised
     """
     def __init__(self, received_json):
         self.received_json = received_json
