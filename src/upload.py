@@ -8,15 +8,18 @@ Created on Sat Jan  5 09:45:25 2019
 
 import requests
 from os import path
+from time import sleep
 
 from slacktools import SlackTools
 from irrp_file import IRRPFile
 
 
 class Upload:
-    def __init__(self, slack_client_class, setting_class, smartrc_dir):
+    def __init__(self, slack_client_class, setting_class, smartrc_dir,
+                 sleep_time=3):
         self.sc = slack_client_class
         self.setting = setting_class
+        self.sleep_time = sleep_time
         # self.smartrc_dir = smartrc_dir
         self.stool = SlackTools(self.sc, self.setting)
         self.irrpfile = IRRPFile(smartrc_dir=smartrc_dir)
@@ -43,9 +46,11 @@ class Upload:
         with open(filename, "r") as irrp:
             lines = irrp.readlines()
         self.stool.send_a_message(upload_formats[0])
+        sleep(self.sleep_time)
         for i, line in enumerate(lines):
             self.stool.send_a_message(upload_formats[1].format(line=line,
                                                                figure=i))
+            sleep(self.sleep_time)
         self.stool.send_a_message(upload_formats[2].format(figure=i))
 
     def upload_file(self):
