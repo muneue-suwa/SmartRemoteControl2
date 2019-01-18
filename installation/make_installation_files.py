@@ -46,8 +46,9 @@ class Installation:
         print(smartrc_bot_crontab)
 
         with open(path.join(self.dir_name, "pigpiod.crontab"), "w") as f3:
+            # f3.write(r"@reboot pigpiod")
+            # f3.write("\n")
             for pc in pigpiod_crontab:
-                f3.write(r"@reboot pigpiod\n")
                 f3.write(pc)
             f3.write("\n")
         print(pigpiod_crontab)

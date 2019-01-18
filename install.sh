@@ -25,6 +25,10 @@ installation()
 
   # Install
   python3 $INSTALL_SH_DIRNAME/installation/make_installation_files.py $INSTALL_SH_DIRNAME
+  ## pigpio
+  sudo pigpiod
+  sudo systemctl enable pigpiod.service
+  sudo systemctl restart pigpiod.service
   ## crontab
   crontab $INSTALL_SH_DIRNAME/installation/smartrc_bot.crontab
   sudo crontab $INSTALL_SH_DIRNAME/installation/pigpiod.crontab
