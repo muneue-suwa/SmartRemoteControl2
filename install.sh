@@ -27,7 +27,6 @@ installation()
   python3 $INSTALL_SH_DIRNAME/installation/make_installation_files.py $INSTALL_SH_DIRNAME
   ## crontab
   crontab $INSTALL_SH_DIRNAME/installation/smartrc_bot.crontab
-  echo "pigpiod" >> $INSTALL_SH_DIRNAME/installation/pigpiod.crontab
   sudo crontab $INSTALL_SH_DIRNAME/installation/pigpiod.crontab
   ## smartrc
   sudo mv $INSTALL_SH_DIRNAME/installation/smartrc /usr/local/bin/

@@ -47,6 +47,7 @@ class Installation:
 
         with open(path.join(self.dir_name, "pigpiod.crontab"), "w") as f3:
             for pc in pigpiod_crontab:
+                f3.write(r"@reboot pigpiod\n")
                 f3.write(pc)
             f3.write("\n")
         print(pigpiod_crontab)
