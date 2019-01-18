@@ -8,9 +8,6 @@ Created on Sat Jan  5 09:45:25 2019
 
 import requests
 from os import path
-from datetime import datetime
-import json
-from math import floor
 
 from slacktools import SlackTools
 from irrp_file import IRRPFile
@@ -25,20 +22,33 @@ class Upload:
         self.irrpfile = IRRPFile(smartrc_dir=smartrc_dir)
 
     def upload_text(self):
+        """ how to upload text to slack channel
+        from_smartrc_bot [filename] START_IRRP_FILE
+        from_smartrc_bot [filename] CONTINUE_IRRP_FILE 0
+        from_smartrc_bot [filename] CONTINUE_IRRP_FILE 1
+        from_smartrc_bot [filename] CONTINUE_IRRP_FILE n
+        from_smartrc_bot [filename] END_IRRP_FILE n
+        And whitespace will replace to '+'
+        """
+        descriptions = ["START_IRRP_FILE",
+                        "CONTINUE_IRRP_FILE+{line}+{figure}",
+                        "END_IRRP_FILE+{figure}"]
+        upload_formats = []
         filename = path.join(self.irrpfile.get_latest_filename())
-        with open(filename, "r") as irrp_2:
-            json_file = json.load(irrp_2)
-            string = str(json_file).replace("'", '"').replace(" ", "")
+        for description in descriptions:
+            upload_formats.append("from_smartrc_bot+{filename}"
+                                  "+{description}".format(
+                                          filename=path.basename(filename),
+                                          description=description))
+        with open(filename, "r") as irrp:
+            lines = irrp.readlines()
+        self.stool.send_a_message(upload_formats[0])
+        for i, line in enumerate(lines):
+            self.stool.send_a_message(upload_formats[1].format(line=line,
+                                                               figure=i))
+        self.stool.send_a_message(upload_formats[2].format(figure=i))
 
-        string_len = len(string)
-        for i in range(floor(string_len/1024)):
-            print(string[:1024])
-            self.stool.send_a_message(string[:1024])
-            string = string[1024:]
-        print(string)
-        self.stool.send_a_message(string)
-
-    def upload_file(self, channel_id):
+    def upload_file(self):
         filename = path.join(self.irrpfile.get_latest_filename())
         files = {'file': open(filename, 'r')}
         param = {
