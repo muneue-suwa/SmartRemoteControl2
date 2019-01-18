@@ -40,6 +40,7 @@ class DownloadText:
                   "w") as new_irrp:
             for line in self.lines:
                 new_irrp.write(line)
+        print("{} was successfully downloaded".format(self.filename))
         self.initialization()
         return True
 
