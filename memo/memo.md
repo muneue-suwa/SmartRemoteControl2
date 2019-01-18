@@ -90,9 +90,9 @@ def listen_to(matchstr, flags=0):
 
 ## share() について
 `irrp_2_*.json` の中身を文字列に変えて，slackにメッセージとしてアップする．
-1. `from_smartrc_bot [filename] START_IRRP_FILE [data_1]`
+1. `from_smartrc_bot [filename] START_IRRP_FILE [data_0]`
+1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_1]`
 1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_2]`
-1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_3]`
 1. `from_smartrc_bot [filename] CONTINUE_IRRP_FILE [data_n]`
 1. `from_smartrc_bot [filename] END_IRRP_FILE n`
 
