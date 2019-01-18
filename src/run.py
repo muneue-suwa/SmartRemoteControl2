@@ -15,6 +15,7 @@ import json
 
 from smartrc import SmartRemoteControl
 from exceptions import SlackTokenAuthError, SlackError
+from download import DownloadText
 
 
 class RunSmartrcBot(SmartRemoteControl):
@@ -24,6 +25,7 @@ class RunSmartrcBot(SmartRemoteControl):
             raise FileNotFoundError("smartrc setting file is not found")
         self.smartrc_pattern = re.compile(r'smartrc.*')
         self.fromsmartrcbot_pattern = re.compile(r'from_smartrc_bot.*')
+        self.downloadtext = DownloadText(smartrc_dir=smartrc_dir)
 
     def main(self):
         is_tryConnection = True
@@ -35,7 +37,8 @@ class RunSmartrcBot(SmartRemoteControl):
                     while self.sc.server.connected is True:
                         try:
                             msg = self.sc.rtm_read()
-                            print("msg_raw:", msg)
+                            # print("msg_raw:", msg)
+                            self.downloadtext.check_timeout()
                             if "text" in msg[0]:
                                 message = msg[0]["text"]
                                 print("msg_human:", message)
@@ -71,8 +74,19 @@ class RunSmartrcBot(SmartRemoteControl):
                 elif splited_msg[1] == "list":
                     self.print_std_sc(self.show_id_list())
             elif self.fromsmartrcbot_pattern.match(message):
-                splited_msg = message.split()
-                print(splited_msg)
+                splited_msg = message.split("+")
+                if splited_msg[2] == "START_IRRP_FILE":
+                    res = self.downloadtext.dl_start(filename=splited_msg[1])
+                elif splited_msg[2] == "CONTINUE_IRRP_FILE":
+                    res =\
+                        self.downloadtext.dl_continue(filename=splited_msg[1],
+                                                      line=splited_msg[-2],
+                                                      figure=splited_msg[-1])
+                elif splited_msg[2] == "END_IRRP_FILE":
+                    res = self.downloadtext.dl_end(filename=splited_msg[1],
+                                                   figure=splited_msg[-1])
+                print(res)
+                # print(splited_msg)
         except IndexError:
             pass
 
@@ -88,8 +102,9 @@ class RunSmartrcBot(SmartRemoteControl):
             'as_user': "false",
             'username': self.setting.location
         }
-        raw_responce = requests.post(url="https://slack.com/api/chat.postMessage",
-                                     params=param)
+        raw_responce =\
+            requests.post(url="https://slack.com/api/chat.postMessage",
+                          params=param)
         responce = json.loads(raw_responce.text)
         print("responce :", responce)
         if responce["ok"] is False:
