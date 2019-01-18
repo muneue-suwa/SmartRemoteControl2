@@ -11,8 +11,10 @@ from time import sleep
 from os import path
 import re
 import requests
+import json
 
 from smartrc import SmartRemoteControl
+from exceptions import SlackTokenAuthError, SlackError
 
 
 class RunSmartrcBot(SmartRemoteControl):
@@ -21,6 +23,7 @@ class RunSmartrcBot(SmartRemoteControl):
         if not self.is_settingfile:
             raise FileNotFoundError("smartrc setting file is not found")
         self.smartrc_pattern = re.compile(r'smartrc.*')
+        self.fromsmartrcbot_pattern = re.compile(r'from_smartrc_bot.*')
 
     def main(self):
         is_tryConnection = True
@@ -60,15 +63,18 @@ class RunSmartrcBot(SmartRemoteControl):
                 is_tryConnection = True
 
     def analyze_message(self, message):
-        if self.smartrc_pattern.match(message):
-            splited_msg = message.split()
-            try:
+        try:
+            if self.smartrc_pattern.match(message):
+                splited_msg = message.split()
                 if splited_msg[1] == "send" or splited_msg[1] == "playback":
                     self.print_std_sc(self.send(playback_id=splited_msg[2]))
                 elif splited_msg[1] == "list":
                     self.print_std_sc(self.show_id_list())
-            except IndexError:
-                pass
+            elif self.fromsmartrcbot_pattern.match(message):
+                splited_msg = message.split()
+                print(splited_msg)
+        except IndexError:
+            pass
 
     def print_std_sc(self, message):
         print(message)
@@ -82,11 +88,17 @@ class RunSmartrcBot(SmartRemoteControl):
             'as_user': "false",
             'username': self.setting.location
         }
-        responce = requests.post(url="https://slack.com/api/chat.postMessage",
-                                 params=param)
-        print("Connected to slack")
-        print(param)
-        print("Connected to slack")
+        raw_responce = requests.post(url="https://slack.com/api/chat.postMessage",
+                                     params=param)
+        responce = json.loads(raw_responce.text)
+        print("responce :", responce)
+        if responce["ok"] is False:
+            if responce["error"] == "invalid_auth":
+                raise SlackTokenAuthError("Invalid authorization")
+            else:
+                raise SlackError(responce)
+        elif responce["ok"] is True:
+            print("Connected to slack")
         return responce
 
 
