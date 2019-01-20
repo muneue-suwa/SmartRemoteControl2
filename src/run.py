@@ -73,7 +73,8 @@ class RunSmartrcBot(SmartRemoteControl):
                     self.print_std_sc(self.send(playback_id=splited_msg[2]))
                 elif splited_msg[1] == "list":
                     self.print_std_sc(self.show_id_list())
-            elif self.fromsmartrcbot_pattern.match(message):
+            elif (not self.setting.mode and
+                  self.fromsmartrcbot_pattern.match(message)):
                 splited_msg = message.split("+")
                 if splited_msg[2] == "START_IRRP_FILE":
                     res = self.downloadtext.dl_start(filename=splited_msg[1])
