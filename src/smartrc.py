@@ -64,6 +64,9 @@ class SmartRemoteControl:
         # If Internet was not connected: requests.exceptions.ConnectionError
 
     def learn(self, record_id):
+        print(self.arguments.command[0])
+        if record_id is None:
+            record_id = self.rcd_ply_common()
         irrp = IRRP(gpio=self.setting.gpio_record,
                     filename=self.irrpfile.get_new_filename(),
                     post=130, no_confirm=True)
@@ -72,7 +75,7 @@ class SmartRemoteControl:
     def send(self, playback_id):
         self.update_id_list()
         if playback_id is None:
-            self.rcd_ply_common("send")
+            self.rcd_ply_common()
         try:
             filename = self.irrpfile.get_latest_filename()
             if playback_id in self.id_list:
@@ -124,7 +127,7 @@ class SmartRemoteControl:
         elif command == "send" or command == "playback":
             self.send(None)
         elif command == "learn" or command == "record":
-            self.rcd_ply_common(self.learn)
+            self.learn(None)
         elif command == "recovery":
             pass
 #         elif command == "init":
@@ -132,19 +135,24 @@ class SmartRemoteControl:
         elif command == "update":
             pass
 
-    def rcd_ply_common(self, rcd_ply_mode_str):
+    def rcd_ply_common(self):
+        rcd_ply_mode_str = self.arguments.command[0]
         rcd_ply_id = self.arguments.record_playback_id
         if not rcd_ply_id:
-            if rcd_ply_mode_str == "send":
+            if rcd_ply_mode_str == "send" or rcd_ply_mode_str == "playback":
                 if len(self.id_list) < 1:
                     print("No recorded ID")
                     return False
                 else:
                     print(self.id_list)
-            elif rcd_ply_mode_str != "learn":
+            elif rcd_ply_mode_str != "learn" and rcd_ply_mode_str != "record":
                 return False
             rcd_ply_id = input("Input {} ID: ".format(rcd_ply_mode_str))
 
+        if rcd_ply_mode_str == "send" or rcd_ply_mode_str == "playback":
+            if not rcd_ply_id in self.id_list:
+                print("No recorded ID: {}".format(rcd_ply_id))
+                return False
         id_yn = input("Are you sure"
                       " to decide the {} id?:"
                       " {} (y/n): ".format(rcd_ply_mode_str, rcd_ply_id))
@@ -152,7 +160,7 @@ class SmartRemoteControl:
             print("Canceled")
             return False
 
-        return True
+        return rcd_ply_id
 
 if __name__ == "__main__":
     smartrc_dir = path.expanduser("~/SmartRemoteControl2")
