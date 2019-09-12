@@ -25,6 +25,8 @@ class IRRPFile:
 
     def get_id_list(self):
         filename = self.get_latest_filename()
+        if filename is False:
+            return []
         with open(filename, "r") as irrp:
             irrp_dict = json.load(irrp)
 
@@ -32,6 +34,8 @@ class IRRPFile:
 
     def get_latest_filename(self):
         filenames = glob(path.join(self.smartrc_dir, "data/smartrc_*.irrp"))
+        if len(filenames) < 1:
+            return False
         datetime_list = []
         for filename in filenames:
             datetime_list.append(

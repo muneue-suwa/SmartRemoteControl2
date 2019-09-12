@@ -70,9 +70,12 @@ class SmartRemoteControl:
         irrp.record(record_id)
 
     def send(self, playback_id):
+        self.update_id_list()
+        if playback_id is None:
+            self.rcd_ply_common("send")
         try:
             filename = self.irrpfile.get_latest_filename()
-            if playback_id in self.irrpfile.get_id_list():
+            if playback_id in self.id_list:
                 irrp = IRRP(gpio=self.setting.gpio_playback,
                             filename=filename)
                 irrp.playback(playback_id)
@@ -86,9 +89,9 @@ class SmartRemoteControl:
                                smartrc_dir=self.smartrc_dir)
         dl.main()
 
-    def show_id_list(self):
+    def update_id_list(self):
         try:
-            return self.irrpfile.get_id_list()
+            self.id_list = self.irrpfile.get_id_list()
         except FileNotFoundError as err:
             return err
 
@@ -119,7 +122,7 @@ class SmartRemoteControl:
             if self.setting.mode is True:
                 self.upload.upload_text()
         elif command == "send" or command == "playback":
-            self.rcd_ply_common(self.send)
+            self.send(None)
         elif command == "learn" or command == "record":
             self.rcd_ply_common(self.learn)
         elif command == "recovery":
@@ -129,10 +132,17 @@ class SmartRemoteControl:
         elif command == "update":
             pass
 
-    def rcd_ply_common(self, rcd_ply_func):
-        rcd_ply_mode_str = self.arguments.command[0]
+    def rcd_ply_common(self, rcd_ply_mode_str):
         rcd_ply_id = self.arguments.record_playback_id
         if not rcd_ply_id:
+            if rcd_ply_mode_str == "send":
+                if len(self.id_list) < 1:
+                    print("No recorded ID")
+                    return False
+                else:
+                    print(self.id_list)
+            elif rcd_ply_mode_str != "learn":
+                return False
             rcd_ply_id = input("Input {} ID: ".format(rcd_ply_mode_str))
 
         id_yn = input("Are you sure"
@@ -142,7 +152,6 @@ class SmartRemoteControl:
             print("Canceled")
             return False
 
-        rcd_ply_func(rcd_ply_id)
         return True
 
 if __name__ == "__main__":
