@@ -3,7 +3,7 @@
 """
 Created on Sun Jan 13 11:26:22 2019
 
-@author: wincrantu
+@author: dongsiku
 """
 
 from os import path
@@ -25,7 +25,8 @@ class Installation:
 
     def make_crontab(self):
         smartrc_bot_crontab = (r"@reboot python3 "
-                               r"{install_sh_dirname}/src/run.py"
+                               r"{install_sh_dirname}/src/run.py "
+                               r"{install_sh_dirname}"
                                r" >> {install_sh_dirname}/log/"
                                r"smartrc_bot_$(date +\%Y\%m\%d_\%H\%M\%S).log"
                                r" 2>&1")
@@ -55,7 +56,8 @@ class Installation:
 
     def make_smartrc_file(self):
         smartrc_lines = ["#!/bin/bash\n",
-                         "python3 {install_sh_dirname}/src/smartrc.py $@"
+                         "python3 {install_sh_dirname}/src/smartrc.py "
+                         "{install_sh_dirname} $@"
                          "".format(install_sh_dirname=self.INSTALL_SH_DIRNAME)]
 
         with open(path.join(self.dir_name, "smartrc"), "w") as f2:

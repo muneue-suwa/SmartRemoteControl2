@@ -3,7 +3,7 @@
 """
 Created on Sun Dec 30 22:36:06 2018
 
-@author: crantu
+@author: dongsiku
 """
 
 
@@ -12,6 +12,7 @@ from os import path
 import re
 import requests
 import json
+import sys
 
 from smartrc import SmartRemoteControl
 from exceptions import SlackTokenAuthError, SlackError
@@ -19,7 +20,9 @@ from download import DownloadText
 
 
 class RunSmartrcBot(SmartRemoteControl):
-    def __init__(self, smartrc_dir):
+    def __init__(self, smartrc_dir=None):
+        if smartrc_dir is None:
+            smartrc_dir = sys.argv[1]
         super().__init__(smartrc_dir)
         if not self.is_settingfile:
             raise FileNotFoundError("smartrc setting file is not found")
@@ -119,6 +122,5 @@ class RunSmartrcBot(SmartRemoteControl):
 
 
 if __name__ == "__main__":
-    smartrc_dir = path.expanduser("~/Git/SmartRemoteControl2")
-    bot = RunSmartrcBot(smartrc_dir)
+    bot = RunSmartrcBot()
     bot.main()

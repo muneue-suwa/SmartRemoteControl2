@@ -3,13 +3,14 @@
 """
 Created on Sun Dec 30 09:12:02 2018
 
-@author: wincrantu
+@author: dongsiku
 """
 
 
 from os import path
 from slackclient import SlackClient
-from argparse import ArgumentParser
+import argparse
+import sys
 
 from config import ReadSetting, InitializeSetting
 from slacktools import SlackTools
@@ -22,26 +23,29 @@ from upload import Upload
 
 
 class SmartRemoteControl:
-    def __init__(self, smartrc_dir):
-        self.smartrc_dir = smartrc_dir
+    def __init__(self, smartrc_dir=None):
+        if smartrc_dir is None:
+            self.SMARTRC_DIR = sys.argv[1]
+        else:
+            self.SMARTRC_DIR = smartrc_dir
         setting_filename =\
-            path.join(smartrc_dir, "setting/.smartrc.cfg")
+            path.join(self.SMARTRC_DIR, "setting/.smartrc.cfg")
         self.is_settingfile = False
         if path.isfile(setting_filename):
             self.read_setting()
             self.is_settingfile = True
-            self.irrpfile = IRRPFile(smartrc_dir=smartrc_dir)
+            self.irrpfile = IRRPFile(smartrc_dir=self.SMARTRC_DIR)
             self.upload = Upload(slack_client_class=self.sc,
                                  setting_class=self.setting,
-                                 smartrc_dir=smartrc_dir)
+                                 smartrc_dir=self.SMARTRC_DIR)
 
     def read_setting(self):
-        self.setting = ReadSetting(self.smartrc_dir)
+        self.setting = ReadSetting(self.SMARTRC_DIR)
         self.sc = SlackClient(self.setting.slack_token)
         self.stool = SlackTools(self.sc, self.setting)
 
 #    def init(self):
-#        init_setting = InitializeSetting(self.smartrc_dir)
+#        init_setting = InitializeSetting(self.SMARTRC_DIR)
 #        init_sc = SlackClient(init_setting.slack_token)
 #        channel_id = self.get_smartrc_channel_id(init_sc)
 #        init_setting.write_channel_id(channel_id)
@@ -89,7 +93,7 @@ class SmartRemoteControl:
     def recovery(self):
         dl = download.Download(slack_token=self.setting.slack_token,
                                channel_id=self.setting.channel_id,
-                               smartrc_dir=self.smartrc_dir)
+                               smartrc_dir=self.SMARTRC_DIR)
         dl.main()
 
     def update_id_list(self):
@@ -99,10 +103,12 @@ class SmartRemoteControl:
             return err
 
     def get_arguments(self):
-        parser = ArgumentParser()
+        parser = argparse.ArgumentParser()
         commands = ["backup", "share", "send", "playback",
                     "learn", "record", "recovery",  # "init",
                     "update"]
+        parser.add_argument("smartrc_dir", nargs=1, type=str,
+                            help=argparse.SUPPRESS)
         parser.add_argument("command", nargs=1, type=str,
                             choices=commands,
                             help="startrc command")
@@ -163,6 +169,5 @@ class SmartRemoteControl:
         return rcd_ply_id
 
 if __name__ == "__main__":
-    smartrc_dir = path.expanduser("~/SmartRemoteControl2")
-    smartrc = SmartRemoteControl(smartrc_dir)
+    smartrc = SmartRemoteControl()
     smartrc.main()
