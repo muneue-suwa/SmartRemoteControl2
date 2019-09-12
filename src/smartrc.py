@@ -95,7 +95,8 @@ class SmartRemoteControl:
     def get_arguments(self):
         parser = ArgumentParser()
         commands = ["backup", "share", "send", "playback",
-                    "learn", "record", "recovery", "init", "update"]
+                    "learn", "record", "recovery",  # "init",
+                    "update"]
         parser.add_argument("command", nargs=1, type=str,
                             choices=commands,
                             help="startrc command")
@@ -123,8 +124,8 @@ class SmartRemoteControl:
             self.rcd_ply_common(self.learn)
         elif command == "recovery":
             pass
-        elif command == "init":
-            self.init()
+#         elif command == "init":
+#             self.init()
         elif command == "update":
             pass
 
