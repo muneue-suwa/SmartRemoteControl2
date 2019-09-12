@@ -17,7 +17,7 @@ installation()
   mkdir -p $INSTALL_SH_DIRNAME/data
 
   # Run smartrc.py init to make .smartrc.cfg
-  python3 $INSTALL_SH_DIRNAME/src/smartrc.py init
+  python3 $INSTALL_SH_DIRNAME/src/smartrc_init.py $INSTALL_SH_DIRNAME
   if [ ! -f $INSTALL_SH_DIRNAME/setting/.smartrc.cfg ]; then
       echo "Occured error when initializing smartrc"
       return 1
@@ -25,6 +25,8 @@ installation()
 
   # Install
   python3 $INSTALL_SH_DIRNAME/installation/make_installation_files.py $INSTALL_SH_DIRNAME
+  ## Additional APT
+  sudo apt install pigpio -y
   ## pigpio
   sudo pigpiod
   sudo systemctl enable pigpiod.service
