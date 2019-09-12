@@ -40,15 +40,15 @@ class SmartRemoteControl:
         self.sc = SlackClient(self.setting.slack_token)
         self.stool = SlackTools(self.sc, self.setting)
 
-    def init(self):
-        init_setting = InitializeSetting(self.smartrc_dir)
-        init_sc = SlackClient(init_setting.slack_token)
-        channel_id = self.get_smartrc_channel_id(init_sc)
-        init_setting.write_channel_id(channel_id)
-        self.read_setting()
-        msg =\
-            "{} was added in '# smartrc' channel".format(self.setting.location)
-        self.stool.send_a_message(msg)
+#    def init(self):
+#        init_setting = InitializeSetting(self.smartrc_dir)
+#        init_sc = SlackClient(init_setting.slack_token)
+#        channel_id = self.get_smartrc_channel_id(init_sc)
+#        init_setting.write_channel_id(channel_id)
+#        self.read_setting()
+#        msg =\
+#            "{} was added in '# smartrc' channel".format(self.setting.location)
+#        self.stool.send_a_message(msg)
 
     def get_smartrc_channel_id(self, sc_class):
         channels_list = sc_class.api_call("channels.list")
@@ -145,6 +145,6 @@ class SmartRemoteControl:
         return True
 
 if __name__ == "__main__":
-    smartrc_dir = path.expanduser("~/Git/SmartRemoteControl2")
+    smartrc_dir = path.expanduser("~/SmartRemoteControl2")
     smartrc = SmartRemoteControl(smartrc_dir)
     smartrc.main()
