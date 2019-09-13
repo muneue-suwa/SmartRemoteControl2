@@ -67,7 +67,7 @@ class SmartRemoteControl:
         raise SlackClassNotFound("The channel '# smartrc' was not found")
         # If Internet was not connected: requests.exceptions.ConnectionError
 
-    def learn(self, record_id):
+    def record(self, record_id):
         print(self.arguments.command[0])
         if record_id is None:
             record_id = self.rcd_ply_common()
@@ -76,7 +76,7 @@ class SmartRemoteControl:
                     post=130, no_confirm=True)
         irrp.record(record_id)
 
-    def send(self, playback_id):
+    def playback(self, playback_id):
         self.update_id_list()
         if playback_id is None:
             self.rcd_ply_common()
@@ -131,9 +131,9 @@ class SmartRemoteControl:
             if self.setting.mode is True:
                 self.upload.upload_text()
         elif command == "send" or command == "playback":
-            self.send(None)
+            self.playback(None)
         elif command == "learn" or command == "record":
-            self.learn(None)
+            self.record(None)
         elif command == "recovery":
             pass
 #         elif command == "init":

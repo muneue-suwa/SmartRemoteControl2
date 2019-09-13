@@ -73,7 +73,8 @@ class RunSmartrcBot(SmartRemoteControl):
             if self.smartrc_pattern.match(message):
                 splited_msg = message.split()
                 if splited_msg[1] == "send" or splited_msg[1] == "playback":
-                    self.print_std_sc(self.send(playback_id=splited_msg[2]))
+                    self.print_std_sc(self.playback(
+                                      playback_id=splited_msg[2]))
                 elif splited_msg[1] == "list":
                     self.print_std_sc(self.show_id_list())
             elif (not self.setting.mode and
