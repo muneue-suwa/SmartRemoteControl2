@@ -8,15 +8,15 @@
 $ lsb_release -a
 No LSB modules are available.
 Distributor ID:	Raspbian
-Description:	Raspbian GNU/Linux 9.6 (stretch)
-Release:	9.6
-Codename:	stretch
+Description:	Raspbian GNU/Linux 10 (buster)
+Release:	10
+Codename:	buster
 ```
 
 #### Python
 ```shell
 $ python3 --version
-Python 3.5.3
+Python 3.7.3
 ```
 
 #### venv について
@@ -29,16 +29,15 @@ source env/bin/activate
 python3 -m venv env && \
 source env/bin/activate && \
 pip install pip -U && \
-pip install -r pypi_requirements
+pip install -r requirements.txt
 ```
 
 ## インストール
 ```shell
-mkdir -p $HOME/Git && \
-cd $HOME/Git && \
+cd /to/the/application/path && \
 sudo apt install -y python3-pip python3-requests pigpio && \
-pip install slackclient==1.3.0 && \
-git clone https://github.com/sik103/SmartRemoteControl2.git && \
+pip3 install slackclient==1.3.0 --user && \
+git clone https://github.com/dongsiku/SmartRemoteControl2.git && \
 bash SmartRemoteControl2/install.sh
 ```
 
