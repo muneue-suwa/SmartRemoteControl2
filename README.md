@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 ```shell
 cd /to/the/application/path && \
-sudo apt install -y python3-pip python3-requests pigpio && \
+sudo apt install -y python3-pip python3-requests pigpio git && \
 pip3 install slackclient==1.3.0 --user && \
 git clone https://github.com/dongsiku/SmartRemoteControl2.git && \
 bash SmartRemoteControl2/install.sh
