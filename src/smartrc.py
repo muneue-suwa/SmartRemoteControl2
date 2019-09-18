@@ -12,7 +12,7 @@ from slackclient import SlackClient
 import argparse
 import sys
 
-from config import ReadSetting, InitializeSetting
+from config import ReadSetting
 from slacktools import SlackTools
 from irrp_file import IRRPFile
 from exceptions import SlackClassNotFound, SlackTokenAuthError, SlackError
