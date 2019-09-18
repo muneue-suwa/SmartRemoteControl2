@@ -68,8 +68,7 @@ bash SmartRemoteControl2/install.sh
 
 - playback
 - record
-- share (upload_text, download_text)
-- backup (upload_file)
+- share && backup: [gdrive_manual](manuals/gdrive_manual.md)
 - ~~log~~
 
 ## 参考文献
