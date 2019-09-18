@@ -31,6 +31,7 @@ class DownloadText:
         if not self.check_filename_figure(filename, figure):
             return False
         self.lines.append(line)
+        print("Recieved text: {}".format(line))
         return True
 
     def dl_end(self, filename, figure):

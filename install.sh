@@ -11,6 +11,10 @@ installation()
       echo "Please make the file referencing setting/smartrc.cfg.default"
       return 1
   fi
+  if [ -f $INSTALL_SH_DIRNAME/setting/.smartrc.cfg ]; then
+      echo "Please remove setting/.smartrc.cfg"
+      return 1
+  fi
 
   # Make directories for log and data
   mkdir -p $INSTALL_SH_DIRNAME/log
