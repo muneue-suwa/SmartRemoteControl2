@@ -1,6 +1,9 @@
 [SLACK]
 SLACK_API_TOKEN =
 
+[GDRIVE]
+ID = 
+
 [BASIC]
 LOCATION = my_smartrc
 is_WITH_RECODER = False
