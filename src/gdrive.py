@@ -69,5 +69,6 @@ class GDrive:
 
 
 if __name__ == "__main__":
-    gd = GDrive(is_initialization=True)
-    gd.initialization()
+    if sys.argv[2] == "initialization":
+        gd = GDrive(is_initialization=True)
+        gd.initialization()

@@ -17,3 +17,6 @@ log/
 installation/smartrc_bot.crontab
 installation/pigpiod.crontab
 installation/smartrc
+
+# gdrive
+tmp/
