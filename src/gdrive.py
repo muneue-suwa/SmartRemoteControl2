@@ -47,14 +47,14 @@ class GDrive:
     def download(self):
         command_download =\
             ("gdrive sync download "
-             "{dirname} {gdrive_id}".format(gdrive_id=self.GDRIVE_ID,
+             "{gdrive_id} {dirname}".format(gdrive_id=self.GDRIVE_ID,
                                             dirname=self.DATA_DIR))
         self.run_command(command_download)
 
     def upload(self):
         command_upload =\
-            ("gdrive sync donwload "
-             "{gdrive_id} {dirname}".format(gdrive_id=self.GDRIVE_ID,
+            ("gdrive sync upload "
+             "{dirname} {gdrive_id}".format(gdrive_id=self.GDRIVE_ID,
                                             dirname=self.DATA_DIR))
         self.run_command(command_upload)
 
@@ -63,8 +63,8 @@ class GDrive:
             subprocess.run(command.split(" "), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
         if completed_process.returncode == 1:
-            print("Error: "
-                  "{}".format(completed_process.stdout.decode()).strip())
+            print("Error:\n"
+                  "{}".format(completed_process))
         return completed_process
 
 
