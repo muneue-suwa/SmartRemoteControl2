@@ -29,8 +29,6 @@ installation()
 
   # Install
   python3 $INSTALL_SH_DIRNAME/installation/make_installation_files.py $INSTALL_SH_DIRNAME
-  ## Additional APT
-  sudo apt install pigpio=1.71-0~rpt1 -y
   ## pigpio
   sudo pigpiod
   sudo systemctl enable pigpiod.service
