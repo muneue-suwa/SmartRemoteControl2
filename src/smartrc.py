@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Sun Dec 30 09:12:02 2018
@@ -41,16 +40,6 @@ class SmartRemoteControl:
         self.setting = ReadSetting(self.SMARTRC_DIR)
         self.sc = SlackClient(self.setting.slack_token)
         self.stool = SlackTools(self.sc, self.setting)
-
-#    def init(self):
-#        init_setting = InitializeSetting(self.SMARTRC_DIR)
-#        init_sc = SlackClient(init_setting.slack_token)
-#        channel_id = self.get_smartrc_channel_id(init_sc)
-#        init_setting.write_channel_id(channel_id)
-#        self.read_setting()
-#        msg =\
-#            "{} was added in '# smartrc' channel".format(self.setting.location)
-#        self.stool.send_a_message(msg)
 
     def get_smartrc_channel_id(self, sc_class):
         channels_list = sc_class.api_call("channels.list")
@@ -107,7 +96,7 @@ class SmartRemoteControl:
     def get_arguments(self):
         parser = argparse.ArgumentParser()
         commands = ["backup", "share", "send", "playback",
-                    "learn", "record", "recovery",  # "init",
+                    "learn", "record", "recovery",
                     "update"]
         parser.add_argument("smartrc_dir", nargs=1, type=str,
                             help=argparse.SUPPRESS)
@@ -115,7 +104,6 @@ class SmartRemoteControl:
                             choices=commands,
                             help="startrc command")
         parser.add_argument("record_playback_id", nargs="?", type=str,
-                            # choices=commands,
                             default=None,
                             help="record or playback id")
         self.arguments = parser.parse_args()
@@ -137,8 +125,6 @@ class SmartRemoteControl:
             self.record(None)
         elif command == "recovery":
             self.gdrive.download()
-#         elif command == "init":
-#             self.init()
 
     def rcd_ply_common(self):
         rcd_ply_mode_str = self.arguments.command[0]
@@ -155,7 +141,7 @@ class SmartRemoteControl:
             rcd_ply_id = input("Input {} ID: ".format(rcd_ply_mode_str))
 
         if rcd_ply_mode_str == "send" or rcd_ply_mode_str == "playback":
-            if not rcd_ply_id in self.id_list:
+            if rcd_ply_id not in self.id_list:
                 print("No recorded ID: {}".format(rcd_ply_id))
                 return False
         id_yn = input("Are you sure"
