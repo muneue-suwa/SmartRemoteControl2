@@ -18,8 +18,6 @@ from irrp_file import IRRPFile
 from exceptions import SlackClassNotFound, SlackTokenAuthError, SlackError
 
 from irrp_with_class import IRRP
-from upload import Upload
-# import download
 
 
 class SmartRemoteControl:
@@ -35,9 +33,6 @@ class SmartRemoteControl:
             self.read_setting()
             self.is_settingfile = True
             self.irrpfile = IRRPFile(smartrc_dir=self.SMARTRC_DIR)
-            self.upload = Upload(slack_client_class=self.sc,
-                                 setting_class=self.setting,
-                                 smartrc_dir=self.SMARTRC_DIR)
 
     def read_setting(self):
         self.setting = ReadSetting(self.SMARTRC_DIR)
@@ -91,10 +86,7 @@ class SmartRemoteControl:
             return err
 
     def recovery(self):
-        dl = download.Download(slack_token=self.setting.slack_token,
-                               channel_id=self.setting.channel_id,
-                               smartrc_dir=self.SMARTRC_DIR)
-        dl.main()
+        pass
 
     def update_id_list(self):
         try:
@@ -126,10 +118,9 @@ class SmartRemoteControl:
                 print("The argument '{}' "
                       "was ignored".format(self.arguments.record_playback_id))
         if command == "backup":
-            self.upload.upload_file()
+            pass
         elif command == "share":
-            if self.setting.mode is True:
-                self.upload.upload_text()
+            pass
         elif command == "send" or command == "playback":
             self.playback(None)
         elif command == "learn" or command == "record":
