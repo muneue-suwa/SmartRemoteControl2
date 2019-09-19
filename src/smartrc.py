@@ -11,11 +11,13 @@ from os import path
 from slackclient import SlackClient
 import argparse
 import sys
+from time import sleep
 
 from config import ReadSetting
 from slacktools import SlackTools
 from irrp_file import IRRPFile
 from exceptions import SlackClassNotFound, SlackTokenAuthError, SlackError
+from gdrive import GDrive
 
 from irrp_with_class import IRRP
 
@@ -33,6 +35,7 @@ class SmartRemoteControl:
             self.read_setting()
             self.is_settingfile = True
             self.irrpfile = IRRPFile(smartrc_dir=self.SMARTRC_DIR)
+            self.gdrive = GDrive(smartrc_dir=self.SMARTRC_DIR)
 
     def read_setting(self):
         self.setting = ReadSetting(self.SMARTRC_DIR)
@@ -85,8 +88,15 @@ class SmartRemoteControl:
         except FileNotFoundError as err:
             return err
 
-    def recovery(self):
-        pass
+    def share(self):
+        if self.setting.mode is True:
+            self.gdrive.upload()
+        else:
+            waiting_time = 20
+            print("Waiting {} sec"
+                  " for uploading latest data".format(waiting_time))
+            sleep(waiting_time)
+            self.gdrive.download()
 
     def update_id_list(self):
         try:
@@ -118,19 +128,17 @@ class SmartRemoteControl:
                 print("The argument '{}' "
                       "was ignored".format(self.arguments.record_playback_id))
         if command == "backup":
-            pass
-        elif command == "share":
-            pass
+            self.gdrive.upload()
+        elif command == "share" or command == "update":
+            self.share()
         elif command == "send" or command == "playback":
             self.playback(None)
         elif command == "learn" or command == "record":
             self.record(None)
         elif command == "recovery":
-            pass
+            self.gdrive.download()
 #         elif command == "init":
 #             self.init()
-        elif command == "update":
-            pass
 
     def rcd_ply_common(self):
         rcd_ply_mode_str = self.arguments.command[0]
@@ -158,6 +166,7 @@ class SmartRemoteControl:
             return False
 
         return rcd_ply_id
+
 
 if __name__ == "__main__":
     smartrc = SmartRemoteControl()
