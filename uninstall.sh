@@ -17,3 +17,6 @@ sudo rm /usr/local/bin/smartrc
 # Uninstall pigpio
 sudo systemctl disable pigpiod.service
 sudo systemctl stop pigpiod.service
+
+# Uninstall gdrive
+bash $INSTALL_SH_DIRNAME/uninstall-gdrive.sh

@@ -26,25 +26,28 @@ from smartrc import SmartRemoteControl
 
 
 class SmartRemoteControlInit(SmartRemoteControl):
-    def __init__(self):
-        self.smartrc_dir = sys.argv[1]
-        super().__init__(self.smartrc_dir)
+    def __init__(self, smartrc_dir=None):
+        if smartrc_dir is None:
+            self.SMARTRC_DIR = sys.argv[1]
+        else:
+            self.SMARTRC_DIR = smartrc_dir
+        super().__init__(self.SMARTRC_DIR)
 
         old_setting_filename =\
-            path.join(self.smartrc_dir, "setting/smartrc.cfg")
+            path.join(self.SMARTRC_DIR, "setting/smartrc.cfg")
         if not path.isfile(old_setting_filename):
             raise FileNotFoundError("setting/smartrc.cfg is not found")
+        self.new_setting_filename =\
+            path.join(self.SMARTRC_DIR, "setting/.smartrc.cfg")
 
         self.config = ConfigParser()
         self.config.read(old_setting_filename)
         self.slack_token = self.config["SLACK"]["SLACK_API_TOKEN"]
 
     def write_channel_id(self, channel_id):
-        new_setting_filename =\
-            path.join(self.smartrc_dir, "setting/.smartrc.cfg")
         self.config["SLACK"]["CHANNEL_ID"] = channel_id
-        with open(new_setting_filename, 'w') as configfile:
-            self.config.write(configfile)
+        with open(self.new_setting_filename, 'w') as configfile:
+            self.config.write(configfile.remove_section["GDRIVE"])
 
     def main(self):
         init_sc = SlackClient(self.slack_token)

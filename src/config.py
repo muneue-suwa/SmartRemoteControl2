@@ -13,18 +13,21 @@ from os import path
 
 class ReadSetting:
     def __init__(self, smartrc_dir):
-        config = configparser.ConfigParser()
+        self.config = configparser.ConfigParser()
         setting_filename =\
             path.join(smartrc_dir, "setting/.smartrc.cfg")
-        config.read(setting_filename)
-        self.slack_token = config["SLACK"]["SLACK_API_TOKEN"]
-        self.channel_id = config["SLACK"]["CHANNEL_ID"]
-        self.location = config["BASIC"]["LOCATION"]
-        self.mode = bool(config["BASIC"]["is_WITH_RECODER"])
-        self.default_reply = config["SLACKBOT"]["DEFAULT_REPLY"]
+        self.config.read(setting_filename)
+        self.slack_token = self.config["SLACK"]["SLACK_API_TOKEN"]
+        self.channel_id = self.config["SLACK"]["CHANNEL_ID"]
+        self.location = self.config["BASIC"]["LOCATION"]
+        self.mode = bool(self.config["BASIC"]["is_WITH_RECODER"])
+        self.default_reply = self.config["SLACKBOT"]["DEFAULT_REPLY"]
         if self.mode:
-            self.gpio_record = int(config["GPIO"]["RECORD"])
-        self.gpio_playback = int(config["GPIO"]["PLAYBACK"])
+            self.gpio_record = int(self.config["GPIO"]["RECORD"])
+        self.gpio_playback = int(self.config["GPIO"]["PLAYBACK"])
+
+    def return_gdrive_id(self):
+        return self.config["GDRIVE"]["ID"]
 
     def show(self):
         print("self.slack_token: {}".format(self.slack_token))
