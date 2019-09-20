@@ -6,7 +6,7 @@ INSTALL_SH_DIRNAME=`dirname $INSTALL_SH_FILENAME`
 
 # gdrive
 ## Download gdrive
-mkdir $INSTALL_SH_DIRNAME/tmp
+mkdir -p $INSTALL_SH_DIRNAME/tmp
 GDRIVE_FILENAME=$INSTALL_SH_DIRNAME/tmp/gdrive-linux-rpi
 if [ ! -f $GDRIVE_FILENAME ]; then
     wget "https://github.com/gdrive-org/gdrive/releases/download/2.1.0/gdrive-linux-rpi" -O $GDRIVE_FILENAME

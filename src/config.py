@@ -27,7 +27,10 @@ class ReadSetting:
         self.gpio_playback = int(self.config["GPIO"]["PLAYBACK"])
 
     def return_gdrive_id(self):
-        return self.config["GDRIVE"]["ID"]
+        try:
+            return self.config["GDRIVE"]["ID"]
+        except KeyError:
+            return False
 
     def show(self):
         print("self.slack_token: {}".format(self.slack_token))

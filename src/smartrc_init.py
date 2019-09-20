@@ -46,8 +46,9 @@ class SmartRemoteControlInit(SmartRemoteControl):
 
     def write_channel_id(self, channel_id):
         self.config["SLACK"]["CHANNEL_ID"] = channel_id
+        self.config.remove_section("GDRIVE")
         with open(self.new_setting_filename, 'w') as configfile:
-            self.config.write(configfile.remove_section["GDRIVE"])
+            self.config.write(configfile)
 
     def main(self):
         init_sc = SlackClient(self.slack_token)
