@@ -39,7 +39,7 @@ class Installation:
                                    "".format(record=self.setting.gpio_record))
         smartrc_bot_crontab =\
             smartrc_bot_crontab.format(
-                    install_sh_dirname=self.INSTALL_SH_DIRNAME)
+                install_sh_dirname=self.INSTALL_SH_DIRNAME)
 
         with open(path.join(self.dir_name, "smartrc_bot.crontab"), "w") as f1:
             f1.write(smartrc_bot_crontab)
@@ -47,8 +47,6 @@ class Installation:
         print(smartrc_bot_crontab)
 
         with open(path.join(self.dir_name, "pigpiod.crontab"), "w") as f3:
-            # f3.write(r"@reboot pigpiod")
-            # f3.write("\n")
             for pc in pigpiod_crontab:
                 f3.write(pc)
             f3.write("\n")

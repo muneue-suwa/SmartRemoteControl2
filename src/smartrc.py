@@ -10,7 +10,6 @@ from os import path
 from slackclient import SlackClient
 import argparse
 import sys
-from time import sleep
 
 from config import ReadSetting
 from slacktools import SlackTools

@@ -4,26 +4,6 @@ from slackclient import SlackClient
 import sys
 from smartrc import SmartRemoteControl
 
-# from config import ReadSetting, InitializeSetting
-# class InitializeSetting:
-#     def __init__(self, smartrc_dir):
-#         old_setting_filename =\
-#             path.join(smartrc_dir, "setting/smartrc.cfg")
-#         if not path.isfile(old_setting_filename):
-#             raise FileNotFoundError("setting/smartrc.cfg is not found")
-#         self.config = configparser.ConfigParser()
-#
-#         self.new_setting_filename =\
-#             path.join(smartrc_dir, "setting/.smartrc.cfg")
-#
-#         self.config.read(old_setting_filename)
-#         self.slack_token = self.config["SLACK"]["SLACK_API_TOKEN"]
-#
-#     def write_channel_id(self, channel_id):
-#         self.config["SLACK"]["CHANNEL_ID"] = channel_id
-#         with open(self.new_setting_filename, 'w') as configfile:
-#             self.config.write(configfile)
-
 
 class SmartRemoteControlInit(SmartRemoteControl):
     def __init__(self, smartrc_dir=None):
