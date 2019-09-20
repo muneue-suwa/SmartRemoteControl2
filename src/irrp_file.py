@@ -3,7 +3,7 @@
 """
 Created on Thu Jan  3 22:55:57 2019
 
-@author: wincrantu
+@author: dongsiku
 """
 
 
@@ -15,11 +15,11 @@ import json
 
 class IRRPFile:
     def __init__(self, smartrc_dir):
-        self.smartrc_dir = smartrc_dir
+        self.SMARTRC_DIR = smartrc_dir
 
     def get_new_filename(self):
         str_datetime = datetime.strftime(datetime.today(), "%Y%m%d_%H%M%S")
-        filename = path.join(self.smartrc_dir,
+        filename = path.join(self.SMARTRC_DIR,
                              "data/smartrc_{}.irrp".format(str_datetime))
         return filename
 
@@ -33,19 +33,19 @@ class IRRPFile:
         return list(irrp_dict.keys())
 
     def get_latest_filename(self):
-        filenames = glob(path.join(self.smartrc_dir, "data/smartrc_*.irrp"))
+        filenames = glob(path.join(self.SMARTRC_DIR, "data/smartrc_*.irrp"))
         if len(filenames) < 1:
             return False
         datetime_list = []
         for filename in filenames:
             datetime_list.append(
-                    datetime.strptime(path.basename(filename),
-                                      "smartrc_%Y%m%d_%H%M%S.irrp"))
+                datetime.strptime(path.basename(filename),
+                                  "smartrc_%Y%m%d_%H%M%S.irrp"))
         if not len(datetime_list) > 0:
             raise FileNotFoundError("irrpfile could not be found")
 
         str_datetime = datetime.strftime(max(datetime_list), "%Y%m%d_%H%M%S")
-        return path.join(self.smartrc_dir,
+        return path.join(self.SMARTRC_DIR,
                          "data/smartrc_{}.irrp".format(str_datetime))
 
 
