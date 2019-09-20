@@ -80,12 +80,9 @@ class SmartRemoteControl:
     def share(self):
         if self.setting.mode is True:
             self.gdrive.upload()
+            self.stool.send_a_message("from_smartrc_bot download_irrp_files")
         else:
-            waiting_time = 20
-            print("Waiting {} sec"
-                  " for uploading latest data".format(waiting_time))
-            sleep(waiting_time)
-            self.gdrive.download()
+            print("The mode is onlyPlayback")
 
     def update_id_list(self):
         try:
