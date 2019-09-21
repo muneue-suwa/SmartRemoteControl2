@@ -79,7 +79,7 @@ class SmartRemoteControl:
     def share(self):
         if self.setting.mode is True:
             self.gdrive.upload()
-            self.stool.send_a_message("from_smartrc_bot download_irrp_files")
+            self.stool.send_a_message("smartrc download_irrp_files")
         else:
             print("The mode is onlyPlayback")
 
