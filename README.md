@@ -64,7 +64,3 @@ Python 3.7.3
 ## 参考文献
 
 [格安スマートリモコンの作り方](https://qiita.com/takjg/items/e6b8af53421be54b62c9)
-
-```
-
-```
