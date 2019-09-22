@@ -94,6 +94,28 @@ class SmartRemoteControl:
         except FileNotFoundError as err:
             return err
 
+    def update_smatrc_completion_elements(self):
+        self.update_id_list()
+        smartrc_completion_elements_filename =\
+            path.join(self.SMARTRC_DIR,
+                      "smartrc_completion.d",
+                      "smartrc_completion_elements")
+        with open(smartrc_completion_elements_filename, "w")\
+                as smartrc_completion_elements:
+            smartrc_completion_elements.write("#!/bin/bash\n\n")
+            smartrc_completion_elements.write("SMARTRC_COMMANDS=")
+            smartrc_completion_elements.write('"')
+            for smartrc_command in self.smartrc_commands:
+                smartrc_completion_elements.write(smartrc_command)
+                smartrc_completion_elements.write(" ")
+            smartrc_completion_elements.write('"\n')
+            smartrc_completion_elements.write("RCD_PLY_ID=")
+            smartrc_completion_elements.write('"')
+            for id_l in self.id_list:
+                smartrc_completion_elements.write(id_l)
+                smartrc_completion_elements.write(" ")
+            smartrc_completion_elements.write('"\n')
+
     def get_arguments(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("smartrc_dir", nargs=1, type=str,
@@ -107,6 +129,7 @@ class SmartRemoteControl:
         self.arguments = parser.parse_args()
 
     def main(self):
+        self.update_smatrc_completion_elements()
         self.get_arguments()
         command = self.arguments.command[0]
         if self.arguments.record_playback_id:

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+_smartrc()
+{
+  if [ -f $HOME/bash_completion.d/smartrc_completion_elements.sh ]; then
+    . $HOME/bash_completion.d/smartrc_completion_elements.sh
+  else
+    return 1
+  fi
+  local cur=${COMP_WORDS[COMP_CWORD]}
+  case "$COMP_CWORD" in
+  1)
+    COMPREPLY=( $(compgen -W "$SMARTRC_COMMANDS" -- $cur) );;
+  2)
+    COMPREPLY=( $(compgen -W "$RCD_PLY_ID" -- $cur) );;
+  esac
+}
+
+complete -F _smartrc smartrc

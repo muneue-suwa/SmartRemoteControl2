@@ -1,0 +1,4 @@
+#!/bin/bash
+
+SMARTRC_COMMANDS="hoge foo"
+RCD_PLY_ID="huga hoo"

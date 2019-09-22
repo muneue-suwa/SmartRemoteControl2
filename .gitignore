@@ -20,3 +20,8 @@ installation/smartrc
 
 # gdrive
 tmp/
+
+# smartrc_completion files
+smartrc_completion.d/*
+!smartrc_completion/smatrc_completion.default
+!smartrc_completion/smatrc_completion_elements.default
