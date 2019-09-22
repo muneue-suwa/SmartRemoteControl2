@@ -22,6 +22,7 @@ class Installation:
         self.dir_name = path.dirname(path.abspath(__file__))
         self.make_crontab()
         self.make_smartrc_file()
+        self.make_smartrc_completion()
 
     def make_crontab(self):
         smartrc_bot_crontab = (r"@reboot python3 "
@@ -63,6 +64,30 @@ class Installation:
                 f2.write(line)
                 f2.write("\n")
                 print(line)
+
+    def make_smartrc_completion(self):
+        default_filename = path.join(self.INSTALL_SH_DIRNAME,
+                                     "smartrc_completion.d",
+                                     "smartrc_completion.default")
+        new_filename = path.join(self.INSTALL_SH_DIRNAME,
+                                 "smartrc_completion.d",
+                                 "smartrc_completion")
+        smartrc_completion_elements_filename =\
+            path.join(self.INSTALL_SH_DIRNAME,
+                      "smartrc_completion.d",
+                      "smartrc_completion_elements")
+
+        with open(default_filename, "r") as default_file:
+            lines = default_file.readlines()
+            with open(new_filename, "w") as new_file:
+                new_file.write("#!/bin/bash\n\n")
+                new_file.write("SMARTRC_COMPLETION_ELEMENTS_FILENAME=")
+                new_file.write('"')
+                new_file.write(smartrc_completion_elements_filename)
+                new_file.write('"\n\n')
+                for line in lines:
+                    new_file.write(line)
+                    print(line, end="")
 
 
 if __name__ == "__main__":

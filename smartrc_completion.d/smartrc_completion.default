@@ -1,9 +1,7 @@
-#!/bin/bash
-
 _smartrc()
 {
-  if [ -f $HOME/bash_completion.d/smartrc_completion_elements.sh ]; then
-    . $HOME/bash_completion.d/smartrc_completion_elements.sh
+  if [ -f $SMARTRC_COMPLETION_ELEMENTS_FILENAME ]; then
+    . $SMARTRC_COMPLETION_ELEMENTS_FILENAME
   else
     return 1
   fi
