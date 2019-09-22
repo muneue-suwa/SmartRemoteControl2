@@ -27,7 +27,6 @@ class RunSmartrcBot(SmartRemoteControl):
         if not self.is_settingfile:
             raise FileNotFoundError("smartrc setting file is not found")
         self.smartrc_pattern = re.compile(r'smartrc.*')
-        self.fromsmartrcbot_pattern = re.compile(r'from_smartrc_bot.*')
         self.gdrive = GDrive(smartrc_dir=smartrc_dir)
 
     def main(self):
@@ -43,18 +42,15 @@ class RunSmartrcBot(SmartRemoteControl):
                             # print("msg_raw:", msg)
                             if "text" in msg[0]:
                                 message = msg[0]["text"]
-                                print("msg_human:", message)
+                                print("msg:", message)
                                 self.analyze_message(message)
-                            elif "attachments" in msg[0]:
-                                message = msg[0]["attachments"][0]["fallback"]
-                                print("msg_bot:", message)
-                                self.analyze_message(message)
-                        except IndexError:
+                        except IndexError as index_err:
                             pass
-                        except KeyError:
-                            pass
-                        except TimeoutError as err:
-                            print("TimeoutError: {}".format(err))
+                            # print("IndexError: {}".format(index_err))
+                        except KeyError as key_err:
+                            print("KeyError: {}".format(key_err))
+                        except TimeoutError as time_err:
+                            print("TimeoutError: {}".format(time_err))
                             sleep(60)
                             is_tryConnection = True
                             break
@@ -76,13 +72,12 @@ class RunSmartrcBot(SmartRemoteControl):
                                       playback_id=splited_msg[2]))
                 elif splited_msg[1] == "list":
                     self.print_std_sc(self.show_id_list())
-            elif (not self.setting.mode and
-                  self.fromsmartrcbot_pattern.match(message)):
-                splited_msg = message.split(" ")
-                if splited_msg[1] == "download_irrp_files":
+                elif splited_msg[1] == "download_irrp_files":
+                    print("gdrive downloading...")
                     self.gdrive.download()
         except IndexError:
             pass
+            # print("IndexError: {}".format(index_err))
 
     def print_std_sc(self, message):
         print(message)
