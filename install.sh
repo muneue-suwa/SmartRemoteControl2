@@ -41,7 +41,7 @@ installation()
   sudo chmod +x /usr/local/bin/smartrc
   ## smartrc_completion
   echo "if [ -f $INSTALL_SH_DIRNAME/smartrc_completion.d/smartrc_completion ]; then" >> $HOME/.bashrc
-  echo "  $INSTALL_SH_DIRNAME/smartrc_completion.d/smartrc_completion; fi" >> $HOME/.bashrc
+  echo "  . $INSTALL_SH_DIRNAME/smartrc_completion.d/smartrc_completion; fi" >> $HOME/.bashrc
   sudo chmod +x $INSTALL_SH_DIRNAME/smartrc_completion.d
   sudo chmod +x $INSTALL_SH_DIRNAME/smartrc_completion.d/*
 }
