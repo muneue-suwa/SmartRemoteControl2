@@ -39,6 +39,11 @@ class SmartRemoteControl:
         self.setting = ReadSetting(self.SMARTRC_DIR)
         self.sc = SlackClient(self.setting.slack_token)
         self.stool = SlackTools(self.sc, self.setting)
+        self.smartrc_commands = ["backup", "send", "playback",
+                                 "learn", "record", "recovery", "update"]
+        if self.setting.mode is True:
+            self.smartrc_commands.append("share")
+        self.smartrc_commands.sort()
 
     def get_smartrc_channel_id(self, sc_class):
         channels_list = sc_class.api_call("channels.list")
@@ -91,13 +96,10 @@ class SmartRemoteControl:
 
     def get_arguments(self):
         parser = argparse.ArgumentParser()
-        commands = ["backup", "share", "send", "playback",
-                    "learn", "record", "recovery",
-                    "update"]
         parser.add_argument("smartrc_dir", nargs=1, type=str,
                             help=argparse.SUPPRESS)
         parser.add_argument("command", nargs=1, type=str,
-                            choices=commands,
+                            choices=self.smartrc_commands,
                             help="startrc command")
         parser.add_argument("record_playback_id", nargs="?", type=str,
                             default=None,
