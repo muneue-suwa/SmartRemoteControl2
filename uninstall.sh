@@ -20,3 +20,5 @@ sudo systemctl stop pigpiod.service
 
 # Uninstall gdrive
 #bash $INSTALL_SH_DIRNAME/uninstall-gdrive.sh
+
+sed -i '/\/smartrc_completion.d\/smartrc_completion/d' $HOME/.bashrc
